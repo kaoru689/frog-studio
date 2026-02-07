@@ -54,6 +54,26 @@
    - 外部ドメインの画像を使用する場合は `next.config.ts` の `remotePatterns` に追加
    - 許可済みドメイン: `images.microcms-assets.io`, `lh3.googleusercontent.com`
 
+### 【必須】AI Visibility & AAO標準装備
+
+> ⚠️ **以下の対策は、指示がなくても全てのサイト制作時に必ず実施すること**
+
+1. **AI Visibility対策**
+   - ChatGPT、Perplexity、Google SGE等のAI検索エンジンに正しく認識されるサイト構造
+   - Schema.org構造化データ（ProfessionalService/LocalBusiness）を必ず実装
+   - サービス内容、料金、FAQをAIが抽出しやすい形式で記述
+
+2. **AAO（AIエージェント最適化）対応**
+   - `ai-content-type`、`ai-service-category`等のカスタムメタタグを追加
+   - FAQPage、Offer、OfferCatalog スキーマを完備
+   - 価格、納期、特徴をJSON-LDで構造化
+
+3. **構造化データの必須要素**
+   - サービス名、説明、価格帯（priceRange）
+   - 提供エリア（areaServed）
+   - よくある質問（FAQPage）
+   - 評価情報（aggregateRating）がある場合は追加
+
 ---
 
 ## 4. 特殊実装ロジック

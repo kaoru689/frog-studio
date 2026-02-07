@@ -305,22 +305,11 @@ export default function RootLayout({
                 {/* Preconnect to Google Fonts for Material Symbols */}
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                {/* Material Symbols - loaded async to prevent render blocking */}
+                {/* Material Symbols - direct loading for reliability */}
                 <link
-                    rel="preload"
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
-                    as="style"
-                />
-                <link
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
                     rel="stylesheet"
-                    media="print"
-                    // @ts-expect-error - onLoad string for async font loading
-                    onLoad="this.media='all'"
                 />
-                <noscript>
-                    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet" />
-                </noscript>
                 {/* JSON-LD 構造化データ（複数スキーマ対応） */}
                 {jsonLdArray.map((schema, index) => (
                     <script
