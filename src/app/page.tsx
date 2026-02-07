@@ -123,8 +123,7 @@ export default function TestTopPage() {
                     50% { opacity: 0; }
                 }
             `}</style>
-            {/* External Resources: Material Symbols (Still needed as a link unless using a library) */}
-            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+            {/* External Resources: Material Symbols loaded in layout.tsx */}
 
             {/* Main Content */}
             {/* Main Content */}
@@ -143,7 +142,14 @@ export default function TestTopPage() {
 
                 {/* MOBILE: Hero Background Overlay (Replaces inline image) */}
                 <div className="absolute inset-0 z-0 lg:hidden pointer-events-none">
-                    <div className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-screen" style={{ backgroundImage: "url('/image_f58bc3.jpg?v=impact')" }}></div>
+                    <Image
+                        src="/image_f58bc3.jpg"
+                        alt="Hero Background"
+                        fill
+                        priority
+                        sizes="100vw"
+                        className="object-cover opacity-40 mix-blend-screen"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
                 </div>
 
@@ -256,8 +262,14 @@ export default function TestTopPage() {
 
                             {/* Hero Image with Floating Animation */}
                             <div className="absolute inset-0 z-10 w-full h-full animate-float">
-                                <div className="absolute inset-0 w-full h-full bg-center bg-no-repeat mix-blend-screen opacity-100" style={{ backgroundImage: "url('/image_f58bc3.jpg?v=impact')", backgroundSize: "cover", maskImage: "radial-gradient(circle at center, black 30%, transparent 80%)", WebkitMaskImage: "radial-gradient(circle at center, black 30%, transparent 80%)" }}>
-                                </div>
+                                <Image
+                                    src="/image_f58bc3.jpg"
+                                    alt="Cyber Frog Hero"
+                                    fill
+                                    priority
+                                    sizes="(max-width: 1024px) 0vw, 50vw"
+                                    className="object-cover mix-blend-screen [mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)]"
+                                />
                             </div>
 
                             <div className="absolute inset-0 z-20 pointer-events-none">
