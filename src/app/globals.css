@@ -1,0 +1,252 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 248, 250, 252;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 248, 250, 252;
+    --background-start-rgb: 15, 23, 42;
+    --background-end-rgb: 30, 41, 59;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-end-rgb)));
+  font-feature-settings: "palt";
+}
+
+/* ダークモード切り替え時のトランジション */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #020804;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #064025;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0df259;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+/* グラデーションテキスト */
+.gradient-text {
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* グラスモーフィズム効果 */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(51, 65, 85, 0.3);
+}
+
+/* フローティングアニメーション背景 */
+.floating-bg {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: float 6s ease-in-out infinite;
+}
+
+.dark .floating-bg {
+  opacity: 0.2;
+}
+
+/* セクション共通スタイル */
+.section-padding {
+  @apply px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24;
+}
+
+/* ボタンのホバーエフェクト */
+.btn-primary {
+  @apply relative overflow-hidden bg-primary text-white font-semibold py-3 px-8 rounded-full transition-all duration-300;
+  @apply hover:opacity-80 hover:shadow-lg hover:shadow-primary/30;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  @apply active:scale-95;
+}
+
+.btn-secondary {
+  @apply relative overflow-hidden border-2 border-primary text-primary font-semibold py-3 px-8 rounded-full transition-all duration-300;
+  @apply hover:bg-primary/10 hover:border-primary;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+  @apply active:scale-95;
+}
+
+.dark .btn-secondary {
+  @apply text-primary border-primary hover:bg-primary/20;
+}
+
+/* カード共通スタイル */
+.card {
+  @apply bg-white rounded-2xl shadow-lg transition-all duration-300;
+  @apply hover:shadow-xl hover:-translate-y-1;
+  @apply dark:bg-dark-surface dark:shadow-dark-border/20;
+}
+
+/* Cyber Theme Utilities */
+.neon-glow {
+  box-shadow: 0 0 10px rgba(13, 242, 89, 0.4), 0 0 30px rgba(13, 242, 89, 0.2);
+}
+
+.neon-text {
+  text-shadow: 0 0 5px rgba(13, 242, 89, 0.8), 0 0 15px rgba(13, 242, 89, 0.4);
+}
+
+.bg-cyber-grid {
+  background-size: 40px 40px;
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+}
+
+.btn-glitch:hover {
+  animation: glitch-anim 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+  background-color: #0df259;
+  color: #000;
+}
+
+@keyframes glitch-anim {
+  0% {
+    transform: translate(0)
+  }
+
+  20% {
+    transform: translate(-2px, 2px)
+  }
+
+  40% {
+    transform: translate(-2px, -2px)
+  }
+
+  60% {
+    transform: translate(2px, 2px)
+  }
+
+  80% {
+    transform: translate(2px, -2px)
+  }
+
+  100% {
+    transform: translate(0)
+  }
+}
+
+.hud-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #0df259;
+  transition: all 0.3s ease;
+}
+
+.hud-tl {
+  top: 0;
+  left: 0;
+  border-right: none;
+  border-bottom: none;
+}
+
+.hud-tr {
+  top: 0;
+  right: 0;
+  border-left: none;
+  border-bottom: none;
+}
+
+.hud-bl {
+  bottom: 0;
+  left: 0;
+  border-right: none;
+  border-top: none;
+}
+
+.hud-br {
+  bottom: 0;
+  right: 0;
+  border-left: none;
+  border-top: none;
+}
+
+.group:hover .hud-corner {
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+}
+
+.hologram-beam {
+  background: linear-gradient(to top, rgba(13, 242, 89, 0.2), transparent);
+  clip-path: polygon(20% 100%, 80% 100%, 100% 0, 0 0);
+}
+
+.typing-effect {
+  overflow: hidden;
+  border-right: 2px solid #0df259;
+  white-space: nowrap;
+  animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+
+  to {
+    width: 100%
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-color: transparent
+  }
+
+  50% {
+    border-color: #0df259;
+  }
+}
+
+/* Cyber Grid Pattern */
+.bg-cyber-lines {
+  background-image:
+    linear-gradient(to right, rgba(13, 242, 89, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(13, 242, 89, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
