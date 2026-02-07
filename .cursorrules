@@ -29,6 +29,31 @@
 - **構造化マークアップ:** FROG Studioでは、すべてのプランで構造化マークアップを標準装備する（AI Visibility対策）
 - **表示速度:** LighthouseのPerformanceスコアで常に90点以上を叩き出す構成
 
+### 【必須】パフォーマンス最適化チェックリスト
+
+> ⚠️ **以下の最適化は、指示がなくても全てのコード変更時に必ず実施すること**
+
+1. **画像最適化**
+   - すべての画像は `next/image` コンポーネントを使用
+   - ファーストビュー（ヒーロー）画像には `priority` 属性を必ず付与
+   - 適切な `sizes` 属性を設定（レスポンシブ最適化）
+   - WebP形式での配信を徹底
+
+2. **フォント最適化**
+   - Google Fonts は `next/font` で最適化読み込み
+   - 外部フォントには `preconnect` ヒントを追加
+   - `display: 'swap'` を必ず指定
+   - レンダリングブロックを発生させない
+
+3. **LCP（Largest Contentful Paint）改善**
+   - ファーストビュー要素は2秒以内に表示されるよう最適化
+   - ヒーロー画像は `priority` で優先読み込み
+   - CSS `background-image` より `next/image` を優先
+
+4. **外部画像対応**
+   - 外部ドメインの画像を使用する場合は `next.config.ts` の `remotePatterns` に追加
+   - 許可済みドメイン: `images.microcms-assets.io`, `lh3.googleusercontent.com`
+
 ---
 
 ## 4. 特殊実装ロジック
@@ -127,4 +152,4 @@ AIの極端な解釈を排除する：
 
 ---
 
-*最終更新: 2026年1月31日*
+*最終更新: 2026年2月8日*
