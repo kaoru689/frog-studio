@@ -35,7 +35,7 @@ const PLANS = [
         name: "STANDARD",
         catchphrase: "信頼を築く王道プラン",
         price: "49,800",
-        features: ["3ページ構成", "microCMS連携", "モダンアニメーション", "AIライティング付"],
+        features: ["3ページ構成", "microCMS連携", "モダンアニメーション"],
         color: "cyan-400",
     },
     {
