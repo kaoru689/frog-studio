@@ -2,8 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
+
+// Lazy load framer-motion to reduce main thread blocking
+const MotionDiv = dynamic(() => import('framer-motion').then(mod => mod.motion.div), {
+    ssr: false,
+    loading: () => <div />
+});
+
+// Direct import for AnimatePresence (needed for mounting)
+import { motion, AnimatePresence } from "framer-motion";
 
 // --- Components for Cyber Effects ---
 
@@ -128,15 +137,18 @@ export default function TestTopPage() {
                 <div className="absolute -top-[10%] -left-[10%] w-[800px] h-[800px] bg-cyber-deepEmerald/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
                 <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-cyber-primary/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                {/* MOBILE: Hero Background Overlay (Replaces inline image) */}
+                {/* MOBILE: Hero Background - LCP optimized */}
                 <div className="absolute inset-0 z-0 lg:hidden pointer-events-none">
                     <Image
                         src="/image_f58bc3.jpg"
                         alt="Hero Background"
                         fill
                         priority
-                        sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, 100vw"
-                        quality={75}
+                        fetchPriority="high"
+                        sizes="100vw"
+                        quality={60}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgcI/8QAIhAAAQMEAgIDAAAAAAAAAAAAAQIDBAUGEQcSABMhQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAP/xAAXEQEBAQEAAAAAAAAAAAAAAAABAAIR/9oADAMBEQCEAPwCk3M8e0+Qaq1F/cJMaQ4hDy2ykpQvskrI+yMHx9dPOw6o6mQlUlm0k9e4kLJUCPH39+A0k//Z"
                         className="object-cover opacity-40 mix-blend-screen"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
@@ -255,9 +267,9 @@ export default function TestTopPage() {
                                     src="/image_f58bc3.jpg"
                                     alt="Cyber Frog Hero"
                                     fill
-                                    priority
-                                    sizes="(max-width: 1024px) 0px, (max-width: 1280px) 600px, 700px"
-                                    quality={75}
+                                    loading="lazy"
+                                    sizes="(max-width: 1024px) 0px, 700px"
+                                    quality={60}
                                     className="object-cover mix-blend-screen [mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)]"
                                 />
                             </div>
