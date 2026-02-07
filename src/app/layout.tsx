@@ -1,23 +1,26 @@
 import type { Metadata } from "next";
-// import { Inter, Noto_Sans_JP } from "next/font/google"; // DISABLED for ECONNRESET recovery
+import { Noto_Sans_JP, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ContactHub from "@/components/sections/ContactHub";
 import { Analytics } from "@vercel/analytics/react";
 
-// const inter = Inter({
-//     subsets: ["latin"],
-//     variable: "--font-inter",
-//     display: "swap",
-// });
+// next/font で最適化読み込み（レンダリングブロック解消）
+const notoSansJP = Noto_Sans_JP({
+    subsets: ["latin"],
+    variable: "--font-noto-sans-jp",
+    display: "swap",
+    weight: ["400", "500", "700", "900"],
+    preload: true,
+});
 
-// const notoSansJP = Noto_Sans_JP({
-//     subsets: ["latin"],
-//     variable: "--font-noto-sans-jp",
-//     display: "swap",
-//     weight: ["400", "500", "700"],
-// });
+const spaceGrotesk = Space_Grotesk({
+    subsets: ["latin"],
+    variable: "--font-space-grotesk",
+    display: "swap",
+    preload: true,
+});
 
 export const metadata: Metadata = {
     title: "FROG Studio | 爆速・堅牢・次世代のAI駆動型ウェブ制作",
@@ -127,22 +130,27 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="ja" className="">
+        <html lang="ja" className={`${notoSansJP.variable} ${spaceGrotesk.variable}`}>
             <head>
-                {/* Preload critical fonts for non-blocking render */}
+                {/* Preconnect to Google Fonts for Material Symbols */}
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                {/* Material Symbols - loaded async to prevent render blocking */}
                 <link
-                    rel="preconnect"
-                    href="https://fonts.googleapis.com"
-                />
-                <link
-                    rel="preconnect"
-                    href="https://fonts.gstatic.com"
-                    crossOrigin="anonymous"
+                    rel="preload"
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
+                    as="style"
                 />
                 <link
                     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap"
                     rel="stylesheet"
+                    media="print"
+                    // @ts-expect-error - onLoad string for async font loading
+                    onLoad="this.media='all'"
                 />
+                <noscript>
+                    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0&display=swap" rel="stylesheet" />
+                </noscript>
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

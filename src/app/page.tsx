@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Space_Grotesk, Noto_Sans_JP } from 'next/font/google';
 
 // --- Components for Cyber Effects ---
 
@@ -100,23 +99,12 @@ const ProcessCard = ({ step, i }: { step: { id: string, title: string, en: strin
 };
 
 
-// Font Configuration
-const spaceGrotesk = Space_Grotesk({
-    subsets: ['latin'],
-    variable: '--font-space-grotesk',
-    display: 'swap',
-});
-
-const notoSansJP = Noto_Sans_JP({
-    subsets: ['latin'],
-    weight: ['400', '500', '700', '900'],
-    variable: '--font-noto-sans-jp',
-    display: 'swap',
-});
+// Font Configuration moved to layout.tsx for optimal loading
+// Using inherited CSS variables: --font-space-grotesk, --font-noto-sans-jp
 
 export default function TestTopPage() {
     return (
-        <div className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen overflow-x-hidden`}>
+        <div className="font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen overflow-x-hidden">
             <style jsx global>{`
                 @keyframes terminal-blink {
                     0%, 100% { opacity: 1; }
@@ -147,7 +135,8 @@ export default function TestTopPage() {
                         alt="Hero Background"
                         fill
                         priority
-                        sizes="100vw"
+                        sizes="(max-width: 640px) 640px, (max-width: 768px) 768px, 100vw"
+                        quality={75}
                         className="object-cover opacity-40 mix-blend-screen"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60"></div>
@@ -267,7 +256,8 @@ export default function TestTopPage() {
                                     alt="Cyber Frog Hero"
                                     fill
                                     priority
-                                    sizes="(max-width: 1024px) 0vw, 50vw"
+                                    sizes="(max-width: 1024px) 0px, (max-width: 1280px) 600px, 700px"
+                                    quality={75}
                                     className="object-cover mix-blend-screen [mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)] [-webkit-mask-image:radial-gradient(circle_at_center,black_30%,transparent_80%)]"
                                 />
                             </div>
