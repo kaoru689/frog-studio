@@ -5,14 +5,13 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import { useState, useEffect, useRef } from "react";
 
-// Lazy load framer-motion to reduce main thread blocking
-const MotionDiv = dynamic(() => import('framer-motion').then(mod => mod.motion.div), {
-    ssr: false,
-    loading: () => <div />
-});
-
-// Direct import for AnimatePresence (needed for mounting)
-import { motion, AnimatePresence } from "framer-motion";
+// Lazy load framer-motion components to eliminate main thread blocking
+const motion = {
+    div: dynamic(() => import('framer-motion').then(mod => mod.motion.div), { ssr: false, loading: () => <div /> }),
+    span: dynamic(() => import('framer-motion').then(mod => mod.motion.span), { ssr: false, loading: () => <span /> }),
+    h4: dynamic(() => import('framer-motion').then(mod => mod.motion.h4), { ssr: false, loading: () => <h4 /> }),
+};
+const AnimatePresence = dynamic(() => import('framer-motion').then(mod => mod.AnimatePresence), { ssr: false });
 
 // --- Components for Cyber Effects ---
 
@@ -146,7 +145,7 @@ export default function TestTopPage() {
                         priority
                         loading="eager"
                         fetchPriority="high"
-                        sizes="100vw"
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         quality={50}
                         placeholder="blur"
                         blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgcI/8QAIhAAAQMEAgIDAAAAAAAAAAAAAQIDBAUGEQcSABMhQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAP/xAAXEQEBAQEAAAAAAAAAAAAAAAABAAIR/9oADAMBEQCEAPwCk3M8e0+Qaq1F/cJMaQ4hDy2ykpQvskrI+yMHx9dPOw6o6mQlUlm0k9e4kLJUCPH39+A0k//Z"
@@ -835,7 +834,7 @@ export default function TestTopPage() {
                             // 【運用・サポート】
                             { q: "スマホ対応はしていますか？", a: "はい、標準で「レスポンシブ対応」を行っております。iPhoneやAndroid、PCなど、どんな端末で見ても崩れず、爆速で表示されることを保証します。" },
                             { q: "自分で更新できるの？", a: "はい、WordPressより簡単です！専用のシンプルな管理画面（microCMS）をご用意しますので、SNSを投稿する感覚で文字や画像をいつでも自由に変えられます。" },
-                            { q: "サーバーの契約が難しそうですが…", a: "ご安心ください。複雑な手続きは一切不要です。無料で使える最新の公開システムの設定はすべてこちらで代行します。お客様はドメイン（住所）を決めるだけでOKです。" },
+                            { q: "サーバーの契約が難しそうですが…", a: "ご安心ください。複雑な手続きは一切不要です。FROG Studioでは、無料で維持できる最新の公開システム（Vercel等）の設定をすべて代行する「アカウント開設・公開セットアップ（15,000円）」をご用意しています。お客様はドメイン（インターネット上の住所）の案を決めるだけでOKです。あとの難しい設定はすべてこちらで完結し、納品時に管理権限をすべてお渡しします。" },
                             { q: "制作会社が消えたらどうなるの？", a: "世界標準の技術（Next.js）を使用しています。特殊な組み方ではなく、現代のWebの共通語で作っているため、万が一の際も他のエンジニアが簡単に引き継げます。" }
                         ].map((item, i) => (
                             <div key={i} className="group border border-cyber-primary/30 rounded bg-black/80 overflow-hidden hover:border-cyber-primary transition-colors duration-300">
