@@ -137,16 +137,17 @@ export default function TestTopPage() {
                 <div className="absolute -top-[10%] -left-[10%] w-[800px] h-[800px] bg-cyber-deepEmerald/20 rounded-full blur-[100px] pointer-events-none z-0"></div>
                 <div className="absolute bottom-0 right-0 w-[800px] h-[800px] bg-cyber-primary/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
 
-                {/* MOBILE: Hero Background - LCP optimized */}
+                {/* MOBILE: Hero Background - Maximum LCP optimization */}
                 <div className="absolute inset-0 z-0 lg:hidden pointer-events-none">
                     <Image
                         src="/image_f58bc3.jpg"
                         alt="Hero Background"
                         fill
                         priority
+                        loading="eager"
                         fetchPriority="high"
                         sizes="100vw"
-                        quality={60}
+                        quality={50}
                         placeholder="blur"
                         blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAKAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgcI/8QAIhAAAQMEAgIDAAAAAAAAAAAAAQIDBAUGEQcSABMhQVFh/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAP/xAAXEQEBAQEAAAAAAAAAAAAAAAABAAIR/9oADAMBEQCEAPwCk3M8e0+Qaq1F/cJMaQ4hDy2ykpQvskrI+yMHx9dPOw6o6mQlUlm0k9e4kLJUCPH39+A0k//Z"
                         className="object-cover opacity-40 mix-blend-screen"
