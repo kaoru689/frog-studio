@@ -762,7 +762,8 @@ export default function TestTopPage() {
                                 { title: "1ページ追加", desc: "構成やコンテンツ量に応じて最適なレイアウトでページを追加制作します。", price: "¥10,000", unit: "(税抜)/回", icon: "note_add" },
                                 { title: "データ分析レポート", desc: "サイトの数値をプロが分析し、翌月の改善案をまとめたPDFレポートを提出します。", price: "¥3,000", unit: "(税抜)/回", icon: "analytics" },
                                 { title: "プロによる改善提案・保守", desc: "分析データに基づき、エンジニアが軽微なテキスト修正やコード最適化を実施。", price: "¥10,000", unit: "(税抜)/回", icon: "engineering" },
-                                { title: "ドメイン・公開設定代行", desc: "独自ドメインの設定やサーバへのサイト公開の手続きをフルサポートします。", price: "¥3,000", unit: "(税抜)/回", icon: "dns" }
+                                { title: "アカウント開設・公開セットアップ", desc: "GitHub、Vercel、microCMS のアカウント作成から連携、デプロイまでを完結させ、納品時に全てのアカウントをお渡しします。", price: "¥15,000", unit: "(税抜)/回", icon: "deployed_code" },
+                                { title: "独自ドメイン・既存サイト連携", desc: "お持ちのドメインの活用や、新規取得のアドバイス、接続設定を行います。", price: "¥5,000", unit: "(税抜)/回", icon: "dns" }
                             ].map((opt, i) => (
                                 <motion.div
                                     key={i}
