@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Space_Grotesk } from "next/font/google";
-import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -303,9 +302,14 @@ export default function RootLayout({
     return (
         <html lang="ja" className={`${notoSansJP.variable} ${spaceGrotesk.variable}`}>
             <head>
-                {/* Preconnect only - fonts loaded async */}
+                {/* Preconnect for Google Fonts */}
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+                {/* Material Symbols - loaded in head for immediate availability */}
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0&display=swap"
+                    rel="stylesheet"
+                />
             </head>
             <body className="font-sans antialiased bg-slate-50 dark:bg-dark-bg text-slate-900 dark:text-slate-100">
                 <Header />
@@ -313,19 +317,6 @@ export default function RootLayout({
                 <ContactHub />
                 <Footer />
                 <Analytics />
-                {/* Material Symbols - async loading after page render (no blocking) */}
-                <Script
-                    id="material-symbols"
-                    strategy="lazyOnload"
-                    dangerouslySetInnerHTML={{
-                        __html: `
-                            var link = document.createElement('link');
-                            link.rel = 'stylesheet';
-                            link.href = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0&display=swap';
-                            document.head.appendChild(link);
-                        `
-                    }}
-                />
                 {/* JSON-LD in body to avoid head blocking */}
                 {jsonLdArray.map((schema, index) => (
                     <script
