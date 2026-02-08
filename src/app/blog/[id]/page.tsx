@@ -19,8 +19,8 @@ const notoSansJP = Noto_Sans_JP({
     display: "swap",
 });
 
-// ISR設定 (現在デバッグのため0)
-export const revalidate = 0;
+// ISR設定
+export const revalidate = 60;
 
 // プラン情報（Pricing.tsxと同期）
 const PLANS = [
@@ -240,19 +240,7 @@ export default async function BlogDetailPage({
     const toc = generateTOC(blog.content);
     const contentWithEnhancements = transformContent(blog.content);
 
-    // AI Visibility記事の画像上書きロジック
-    const normalizeTitle = (blog.title || "").normalize("NFKC");
-    // "AI"が含まれていれば対象（条件緩和）
-    const isAiVisibility =
-        id.toLowerCase().includes("ai") ||
-        blog.id?.includes("ai") ||
-        normalizeTitle.includes("AI");
 
-    const displayThumbnail = isAiVisibility ? {
-        url: "/images/dailyfit/ai-visibility-thumb.jpg",
-        width: 1200,
-        height: 630,
-    } : blog.thumbnail;
 
     return (
         <div
@@ -571,12 +559,12 @@ export default async function BlogDetailPage({
             </section>
 
             {/* サムネイル */}
-            {displayThumbnail && (
+            {blog.thumbnail && (
                 <section className="px-6 pb-12">
                     <div className="max-w-4xl mx-auto">
                         <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_30px_rgba(13,242,89,0.1)]">
                             <Image
-                                src={displayThumbnail.url}
+                                src={blog.thumbnail.url}
                                 alt={blog.title}
                                 fill
                                 className="object-cover"
