@@ -97,15 +97,15 @@ function formatDate(dateString: string) {
 // 目次生成（h2, h3を抽出）
 // 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
 function generateTOC(content: string) {
-    // <h2 id="...">...</h2> の形式を想定 (改行対応)
-    const headingRegex = /<h([23])[^>]+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi;
+    // <h2 id="...">...</h2> の形式を想定 (改行対応) - 柔軟な正規表現に変更
+    const headingRegex = /<h([23])(?:[^>]*?)id="([^"]+)"(?:[^>]*)>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
     while ((match = headingRegex.exec(content)) !== null) {
         const level = parseInt(match[1]);
-        const id = match[2] || ""; // IDがあれば取得
-        const html = match[3]; // 中身のHTML（アイコン含む）をそのまま取得
+        const id = match[2];
+        const html = match[3];
 
         if (id && html) {
             toc.push({ level, html, id });
@@ -122,6 +122,11 @@ function transformContent(content: string): string {
     // 見出しにIDを付与（h2, h3）
     // 見出しにIDを付与（h2, h3） 改行対応
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
+        // 既にIDがある場合は何もしない（microCMS側で設定されている場合など）
+        if (attrs.includes('id=')) {
+            return match;
+        }
+
         const cleanText = text.replace(/<[^>]*>/g, "");
         const id = cleanText.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\-]/g, "");
         // 既存のIDがある場合は上書きしない制御も可能だが、今回は強制的に付与して統一する
@@ -236,10 +241,6 @@ function transformContent(content: string): string {
     // アイコン自動置換
     // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
     // ========================================
-    // ========================================
-    // アイコン自動置換
-    // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
-    // ========================================
     const iconMap: { [key: string]: string } = {
         "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
         "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
@@ -298,14 +299,14 @@ export default async function BlogDetailPage({
                 }
                 /* 強制適用：詳細度を上げるために article を付与 */
                 /* =========================================
-                   基本スタイル (AI Visibility等、標準記事用)
+                   基本スタイル (AI Visibility等、標準記事用) - 品格あるデザイン
                    ========================================= */
                 article .blog-content h2 {
                     font-size: 1.875rem !important; /* text-3xl Standard Luxury Fixed */
                     line-height: 1.4 !important;
                     font-weight: 700 !important;
                     color: #fff !important; /* 標準は白、アクセントで緑 */
-                    margin-top: 3rem !important; 
+                    margin-top: 3.5rem !important; 
                     margin-bottom: 1.5rem !important;
                     padding-bottom: 0.5rem !important;
                     border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
@@ -334,11 +335,11 @@ export default async function BlogDetailPage({
                 }
 
                 /* =========================================
-                   爆速サイト (hc9vbcn3ue) 専用オーバーライド
+                   爆速サイト (hc9vbcn3ue) 専用オーバーライド - インパクト重視
                    ========================================= */
                 article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
                     font-size: 2.25rem !important; /* text-4xl Strong Impact */
-                    font-weight: 800 !important;
+                    font-weight: 900 !important; /* Black */
                     color: #4ade80 !important;
                     margin-top: 4rem !important;
                     margin-bottom: 2rem !important;
