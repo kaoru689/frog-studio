@@ -1,11 +1,10 @@
+
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
-
-
 
 // フォント設定
 const spaceGrotesk = Space_Grotesk({
@@ -94,12 +93,22 @@ function formatDate(dateString: string) {
     });
 }
 
-// 目次生成（h2, h3を抽出）
-// 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
+// ==========================================
+// SYSTEM CORE: Universal TOC Generator
+// ==========================================
+// ID属性の位置やクォートの種類、改行に依存しない究極の正規表現
+// 目的: あらゆる形式のHTMLからH2/H3を抽出し、目次配列を生成する
 function generateTOC(content: string) {
-    // ユーザー指定の超柔軟正規表現: ID属性の位置や改行に左右されない
-    // /<h([23])[\s\S]*?id="([^"]+)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi
+    // Regex explanation:
+    // <h([23])       Match h2 or h3 start
+    // [\s\S]*?       Lazily match any character (including newlines) until...
+    // id="([^"]+)"   Match the id attribute and capture the value
+    // [\s\S]*?       Lazily match any character until...
+    // >              End of opening tag
+    // ([\s\S]*?)     Capture inner content
+    // <\/h[23]>      Match closing tag
     const headingRegex = /<h([23])[\s\S]*?id="([^"]+)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
+
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
@@ -116,28 +125,58 @@ function generateTOC(content: string) {
     return toc;
 }
 
-// コンテンツ変換（見出しID付与 + 自動スタイリング）
+// ==========================================
+// SYSTEM CORE: Content Transformer
+// ==========================================
+// 1. Heading Normalization (Add IDs)
+// 2. Icon Injection
+// 3. UI Component Construction (Boxes)
 function transformContent(content: string): string {
     let transformed = content;
 
-    // 見出しにIDを付与（h2, h3）
-    // 見出しにIDを付与（h2, h3） 改行対応
+    // ---------------------------------------------------------
+    // 1. Heading Normalization
+    // ---------------------------------------------------------
+    // H2, H3にIDを付与。既存IDがある場合は保持。
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
-        // 既にIDがある場合は何もしない（microCMS側で設定されている場合など）
+        // すでにID属性があれば何もしない（microCMSで設定済みの場合など）
         if (attrs.includes('id=')) {
             return match;
         }
 
-        const cleanText = text.replace(/<[^>]*>/g, "");
-        const id = cleanText.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\-]/g, "");
-        // 既存のIDがある場合は上書きしない制御も可能だが、今回は強制的に付与して統一する
+        const cleanText = text.replace(/<[^>]*>/g, ""); // タグ除去
+        // 日本語対応ID生成: 英数字変換せず、エンコードもブラウザ任せで良いが、
+        // ここでは安全のため英数字変換ロジックを採用（必要に応じて変更可）
+        // 今回は "safe-id" 生成ロジック: 英数字以外を除去
+        const id = cleanText.toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/[^\w\-\u0080-\uFFFF]+/g, "") // 日本語もIDに含めるなら \u0080-\uFFFF を残す、今回は英数字のみ
+            || `heading-${Math.random().toString(36).substr(2, 9)}`; // 空になった場合のフォールバック
+
         return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
     });
 
-    // ========================================
-    // 警告ボックス（Warning Box）
-    // キーワード: 【警告】[警告] 【注意】[注意] 【重要】[重要] WARNING CAUTION
-    // ========================================
+    // ---------------------------------------------------------
+    // 2. Icon Injection (Centralized Map)
+    // ---------------------------------------------------------
+    const iconMap: { [key: string]: string } = {
+        "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
+        "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
+        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
+        "code": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code inline-block mr-2 text-[#4ade80]"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
+        "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>',
+        "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
+        "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+    };
+    // Safe Replace using Lookbehind to avoid attribute replacement
+    const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'g');
+    transformed = transformed.replace(pattern, (match) => iconMap[match] || match);
+
+    // ---------------------------------------------------------
+    // 3. UI Component Construction
+    // ---------------------------------------------------------
+
+    // Warning Box
     const warningKeywords = /([【\[]?(警告|注意|重要|WARNING|CAUTION|⚠️)[】\]]:?:?\s*)/i;
     transformed = transformed.replace(
         new RegExp(`<p>${warningKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
@@ -150,10 +189,7 @@ function transformContent(content: string): string {
         </div>`
     );
 
-    // ========================================
-    // ハイライトボックス（Highlight Box）
-    // キーワード: 【ポイント】【ヒント】【メモ】【注目】【注目のポイント】 TIP POINT NOTE
-    // ========================================
+    // Highlight Box
     const highlightKeywords = /([【\[]?(ポイント|ヒント|メモ|注目|注目のポイント|コツ|TIP|POINT|NOTE|💡)[】\]]:?:?\s*)/i;
     transformed = transformed.replace(
         new RegExp(`<p>${highlightKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
@@ -166,10 +202,7 @@ function transformContent(content: string): string {
         </div>`
     );
 
-    // ========================================
-    // 成功事例ボックス（Success Box）
-    // キーワード: 【成功事例】【実績】【事例】 SUCCESS CASE
-    // ========================================
+    // Success Box
     const successKeywords = /([【\[]?(成功事例|実績|事例|成果|SUCCESS|CASE|🏆)[】\]]:?:?\s*)/i;
     transformed = transformed.replace(
         new RegExp(`<p>${successKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
@@ -182,10 +215,7 @@ function transformContent(content: string): string {
         </div>`
     );
 
-    // ========================================
-    // 情報ボックス（Info Box）
-    // キーワード: 【情報】【参考】【補足】 INFO REFERENCE
-    // ========================================
+    // Info Box
     const infoKeywords = /([【\[]?(情報|参考|補足|解説|INFO|REFERENCE|ℹ️)[】\]]:?:?\s*)/i;
     transformed = transformed.replace(
         new RegExp(`<p>${infoKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
@@ -198,68 +228,24 @@ function transformContent(content: string): string {
         </div>`
     );
 
-    // ========================================
-    // チェックリスト変換
-    // ✓ ✅ ☑️ で始まるリストアイテム
-    // ========================================
+    // Check List
     transformed = transformed.replace(
         /<li>([✓✅☑️]\s*)(.*?)<\/li>/gi,
         `<li class="check-item"><span class="material-symbols-outlined check-icon">check_circle</span>$2</li>`
     );
 
-    // ========================================
-    // 引用強調（blockquote内の強調）
-    // ========================================
+    // Blockquote
     transformed = transformed.replace(
         /<blockquote>([\s\S]*?)<\/blockquote>/gi,
         `<blockquote class="cyber-quote">$1</blockquote>`
     );
 
-    // ========================================
-    // テキスト置換（ユーザー指定）
-    // ========================================
-    // 特定のフレーズ完全一致置換（最優先）
+    // Table Wrapper (Mobile Scroll)
+    transformed = transformed.replace(/<table/gi, '<div class="table-wrapper"><table').replace(/<\/table>/gi, '</table></div>');
+
+    // Text Replacement (Branding)
     transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。");
-
-    // その他の表記ゆれ対応
-    // "FROG Studioのチーフコンサルタント" または "チーフコンサルタント" -> "FROG Studio"
     transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
-
-
-
-    // ========================================
-    // テーブル（表）をスマホ対応（横スクロール）
-    // ========================================
-    transformed = transformed.replace(
-        /<table/gi,
-        '<div class="table-wrapper"><table'
-    ).replace(
-        /<\/table>/gi,
-        '</table></div>'
-    );
-
-    // ========================================
-    // アイコン自動置換
-    // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
-    // ========================================
-    const iconMap: { [key: string]: string } = {
-        "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
-        "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
-        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
-        "code": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code inline-block mr-2 text-[#4ade80]"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
-        "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>',
-        "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
-        "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
-    };
-
-    // 一括置換用Regex
-    // Lookbehind (?<!) を使用して、<, </, =, - が直前にない場合のみマッチさせる
-    // これにより HTMLタグや属性値（class="lucide-code"）への誤爆を防ぐ
-    const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'g');
-
-    transformed = transformed.replace(pattern, (match) => {
-        return iconMap[match] || match;
-    });
 
     return transformed;
 }
@@ -279,8 +265,6 @@ export default async function BlogDetailPage({
     const contentWithEnhancements = transformContent(blog.content);
     const toc = generateTOC(contentWithEnhancements);
 
-
-
     return (
         <div
             className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen`}
@@ -291,124 +275,112 @@ export default async function BlogDetailPage({
                 rel="stylesheet"
             />
 
-            {/* 拡張スタイル */}
+            {/* 拡張スタイル: システムレベルで統一された高級感 */}
             <style>{`
                 .blog-content {
                     font-size: 1.05rem;
                     line-height: 2;
                     color: #d1d5db;
                 }
-                /* 強制適用：詳細度を上げるために article を付与 */
+                
                 /* =========================================
-                   基本スタイル (AI Visibility等、標準記事用) - 品格あるデザイン
+                   SYSTEM DESIGN: Unified Luxury Headers
                    ========================================= */
+                /* H2: 圧倒的な存在感と可読性を両立する"Universal Standard" */
                 article .blog-content h2 {
-                    font-size: 1.875rem !important; /* text-3xl Standard Luxury Fixed */
-                    line-height: 1.4 !important;
-                    font-weight: 700 !important;
-                    color: #fff !important; /* 標準は白、アクセントで緑 */
-                    margin-top: 3.5rem !important; 
-                    margin-bottom: 1.5rem !important;
-                    padding-bottom: 0.5rem !important;
-                    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 0.5rem !important;
-                    text-transform: none !important; /* Uppercase解除 */
-                    letter-spacing: 0.02em !important;
-                }
-                article .blog-content h2::before {
-                    content: "●";
-                    color: #0df259;
-                    font-size: 0.6em;
-                    margin-right: 0.25rem;
-                }
-                article .blog-content h3 {
-                    font-size: 1.25rem !important; /* text-xl */
-                    font-weight: 700 !important;
-                    color: #e5e7eb !important;
-                    margin-top: 2.5rem !important;
-                    margin-bottom: 1rem !important;
-                    border-left: 3px solid #0df259;
-                    padding-left: 0.75rem !important;
-                    display: flex !important;
-                    align-items: center !important;
-                }
-
-                /* =========================================
-                   爆速サイト (hc9vbcn3ue) 専用オーバーライド - インパクト重視
-                   ========================================= */
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
-                    font-size: 2.25rem !important; /* text-4xl Strong Impact */
-                    font-weight: 900 !important; /* font-black */
-                    color: #4ade80 !important;
+                    font-size: 2.25rem !important; /* text-4xl相当: あらゆる記事でこのサイズを基準とする */
+                    line-height: 1.3 !important;
+                    font-weight: 800 !important;   /* ExtraBold: 視認性を担保 */
+                    color: #fff !important;
                     margin-top: 4rem !important;
                     margin-bottom: 2rem !important;
                     padding-bottom: 0.75rem !important;
-                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
-                    text-transform: uppercase !important; /* 復活 */
-                    letter-spacing: 0.05em !important;
+                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; /* Cyber Green Accent */
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 0.75rem !important;
+                    letter-spacing: 0.03em !important;
                 }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2 svg {
-                    width: 1.2em !important;
-                    height: 1.2em !important;
-                    color: #fbbf24 !important; /* カラフルアイコン（Gold） */
-                }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2::before {
+                
+                article .blog-content h2::before {
                     content: "▎";
                     color: #0df259;
                     font-size: 0.8em;
                 }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h3 {
-                    font-size: 1.5rem !important; /* text-2xl */
-                    color: #fff !important;
+
+                /* H3: H2に従属しつつ、明確な区分を示す */
+                article .blog-content h3 {
+                    font-size: 1.5rem !important; /* text-2xl相当 */
+                    font-weight: 700 !important;
+                    color: #e5e7eb !important;
                     margin-top: 3rem !important;
+                    margin-bottom: 1.25rem !important;
+                    border-left: 4px solid #0df259;
+                    padding-left: 1rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    background: linear-gradient(90deg, rgba(13, 242, 89, 0.05) 0%, transparent 100%);
+                    border-radius: 0 4px 4px 0;
                 }
 
+                /* アイコンサイズ調整 (H2/H3内) */
                 article .blog-content h2 svg,
                 article .blog-content h3 svg {
                     width: 1.1em !important;
                     height: 1.1em !important;
                 }
+
+                /* Paragraphs */
                 .blog-content p {
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 1.75rem;
                 }
+                
+                /* Emphasis */
                 .blog-content strong {
                     color: #0df259;
                     font-weight: 700;
                 }
+                
+                /* Lists */
                 .blog-content ul, .blog-content ol {
                     margin-left: 1.5rem;
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 2rem;
                 }
                 .blog-content li {
                     margin-bottom: 0.5rem;
                     position: relative;
                 }
+                
+                /* Links */
                 .blog-content a {
                     color: #0df259;
                     text-decoration: underline;
                     text-underline-offset: 3px;
+                    transition: all 0.2s;
                 }
                 .blog-content a:hover {
                     color: #fff;
+                    background: rgba(13, 242, 89, 0.1);
                 }
+                
+                /* Code Blocks */
                 .blog-content pre {
                     background: #0a0a0a;
                     border: 1px solid rgba(13, 242, 89, 0.2);
                     border-radius: 0.75rem;
-                    padding: 1.25rem;
+                    padding: 1.5rem;
                     overflow-x: auto;
-                    margin-bottom: 1.5rem;
+                    margin-bottom: 2rem;
                     font-family: 'JetBrains Mono', monospace;
                     font-size: 0.875rem;
+                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
                 }
                 .blog-content code {
                     background: rgba(13, 242, 89, 0.1);
                     color: #0df259;
-                    padding: 0.125rem 0.5rem;
+                    padding: 0.2rem 0.5rem;
                     border-radius: 0.25rem;
-                    font-size: 0.875rem;
+                    font-size: 0.9em;
                     font-family: 'JetBrains Mono', monospace;
                 }
                 .blog-content pre code {
@@ -416,20 +388,25 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                     padding: 0;
                 }
+                
+                /* Blockquote */
                 .blog-content blockquote {
                     border-left: 3px solid #0df259;
                     padding-left: 1.25rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                     color: #9ca3af;
                     font-style: italic;
                     background: rgba(13, 242, 89, 0.05);
-                    padding: 1.25rem;
+                    padding: 1.5rem;
                     border-radius: 0 0.5rem 0.5rem 0;
                 }
+                
+                /* Images */
                 .blog-content img {
                     border-radius: 0.75rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                     border: 1px solid rgba(255,255,255,0.1);
+                    box-shadow: 0 0 20px rgba(0,0,0,0.5);
                 }
                 
                 /* 警告ボックス */
@@ -441,7 +418,7 @@ export default async function BlogDetailPage({
                     border: 1px solid rgba(239,68,68,0.3);
                     border-radius: 0.75rem;
                     padding: 1.5rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                 }
                 .warning-icon {
                     flex-shrink: 0;
@@ -472,7 +449,7 @@ export default async function BlogDetailPage({
                     border: 1px solid rgba(13,242,89,0.3);
                     border-radius: 0.75rem;
                     padding: 1.5rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                 }
                 .highlight-icon {
                     flex-shrink: 0;
@@ -518,7 +495,7 @@ export default async function BlogDetailPage({
                     border: 1px solid rgba(251,191,36,0.4);
                     border-radius: 0.75rem;
                     padding: 1.5rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                 }
                 .success-icon {
                     flex-shrink: 0;
@@ -549,7 +526,7 @@ export default async function BlogDetailPage({
                     border: 1px solid rgba(6,182,212,0.4);
                     border-radius: 0.75rem;
                     padding: 1.5rem;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                 }
                 .info-icon {
                     flex-shrink: 0;
@@ -578,7 +555,7 @@ export default async function BlogDetailPage({
                     background: linear-gradient(135deg, rgba(13,242,89,0.08) 0%, rgba(6,182,212,0.05) 100%);
                     padding: 1.5rem 1.5rem 1.5rem 2rem;
                     border-radius: 0 0.75rem 0.75rem 0;
-                    margin: 2rem 0;
+                    margin: 2.5rem 0;
                     font-style: italic;
                     color: #d1d5db;
                 }
@@ -691,11 +668,7 @@ export default async function BlogDetailPage({
                         )}
 
                         {/* 本文 */}
-                        <article
-                            data-post-id={id}
-                            className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}
-                        >
-
+                        <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
                             <div
                                 className="blog-content prose prose-invert prose-green max-w-none"
                                 dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
