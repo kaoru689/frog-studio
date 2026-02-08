@@ -1,4 +1,3 @@
-
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -6,818 +5,142 @@ import Image from "next/image";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
 
-// フォント設定
-const spaceGrotesk = Space_Grotesk({
-    subsets: ["latin"],
-    variable: "--font-space-grotesk",
-    display: "swap",
-});
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
+const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700", "900"], variable: "--font-noto-sans-jp", display: "swap" });
 
-const notoSansJP = Noto_Sans_JP({
-    subsets: ["latin"],
-    weight: ["400", "500", "700", "900"],
-    variable: "--font-noto-sans-jp",
-    display: "swap",
-});
-
-// ISR設定
 export const revalidate = 60;
 
-// プラン情報（Pricing.tsxと同期）
 const PLANS = [
-    {
-        name: "LIGHT",
-        catchphrase: "爆速1ページLP",
-        price: "19,800",
-        features: ["1ページ完結LP", "スマホ対応", "お問い合わせフォーム", "基本SEO対策"],
-        color: "cyber-primary",
-    },
-    {
-        name: "STANDARD",
-        catchphrase: "信頼を築く王道プラン",
-        price: "49,800",
-        features: ["3ページ構成", "microCMS連携", "モダンアニメーション"],
-        color: "cyan-400",
-    },
-    {
-        name: "PREMIUM",
-        catchphrase: "攻めのフルスペックサイト",
-        price: "98,000",
-        features: ["5ページ以上", "完全カスタムデザイン", "最高峰UI/UX", "高スコア保証"],
-        color: "amber-400",
-        popular: true,
-    },
+    { name: "LIGHT", catchphrase: "爆速1ページLP", price: "19,800", features: ["1ページ完結LP", "スマホ対応", "お問い合わせフォーム", "基本SEO対策"], color: "cyber-primary" },
+    { name: "STANDARD", catchphrase: "信頼を築く王道プラン", price: "49,800", features: ["3ページ構成", "microCMS連携", "モダンアニメーション"], color: "cyan-400" },
+    { name: "PREMIUM", catchphrase: "攻めのフルスペックサイト", price: "98,000", features: ["5ページ以上", "完全カスタムデザイン", "最高峰UI/UX", "高スコア保証"], color: "amber-400", popular: true },
 ];
 
-// 動的メタデータ生成
-export async function generateMetadata({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params;
     const blog = await getBlogById(id);
-
-    if (!blog) {
-        return {
-            title: "記事が見つかりません | FROG Studio",
-        };
-    }
-
+    if (!blog) return { title: "記事が見つかりません | FROG Studio" };
     return {
         title: `${blog.title} | FROG Studio Blog`,
         description: blog.description || blog.title,
-        openGraph: {
-            title: blog.title,
-            description: blog.description || blog.title,
-            images: blog.thumbnail ? [blog.thumbnail.url] : [],
-        },
+        openGraph: { title: blog.title, description: blog.description || blog.title, images: blog.thumbnail ? [blog.thumbnail.url] : [] },
     };
 }
 
-// 静的パス生成
 export async function generateStaticParams() {
     const blogs = await getBlogs(100);
-    return blogs.map((blog) => ({
-        id: blog.id,
-    }));
+    return blogs.map((blog) => ({ id: blog.id }));
 }
 
-// 日付フォーマット
 function formatDate(dateString: string) {
     const date = new Date(dateString);
-    return date.toLocaleDateString("ja-JP", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    });
+    return date.toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
 }
 
-// ==========================================
-// SYSTEM CORE: Universal TOC Generator (Revised)
-// ==========================================
-// ユーザー指定: /<h([23]).*?id=["']([^"']*)["'].*?>(.*?)<\/h[23]>/gi
-// 目的: 属性の位置、クォートの種類(" or ')、日本語IDに対応し、Toc配列を生成する
-// Dot matches all characters including newlines (implemented as [\s\S] for safety)
+// 1. 超柔軟な目次生成ロジック（日本語ID対応）
 function generateTOC(content: string) {
-    // Regex explanation:
-    // <h([23])          Match H2/H3 start tag
-    // [\s\S]*?          Lazy match any char (including newline) until id=
-    // id=["']           Match id= followed by single or double quote
-    // ([^"']*)          Capture the ID value (any char except quote) - allows Japanese
-    // ["']              Match closing quote
-    // [\s\S]*?          Lazy match until >
-    // >                 End of opening tag
-    // ([\s\S]*?)        Capture inner content
-    // <\/h[23]>         Match closing tag
-    const headingRegex = /<h([23])[\s\S]*?id=["']([^"']*)["'][\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
-
+    // 属性の順番や改行を問わず、id属性を持つh2, h3を確実に抽出
+    const headingRegex = /<h([23]).*?id=["']([^"']*)["'].*?>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
-
     while ((match = headingRegex.exec(content)) !== null) {
-        const level = parseInt(match[1]);
         const id = match[2];
-        const html = match[3];
-
+        const html = match[3].replace(/<[^>]*>/g, ""); // 目次内はタグなしテキストにする
         if (id && html) {
-            toc.push({ level, html, id });
+            toc.push({ level: parseInt(match[1]), html, id });
         }
     }
-
     return toc;
 }
 
-// ==========================================
-// SYSTEM CORE: Content Transformer (Updated)
-// ==========================================
-// 1. Heading Normalization (Japanese Friendly IDs)
-// 2. Icon Injection (Centralized)
-// 3. UI Component Construction
+// 2. 日本語対応ID付与 ＆ アイコン自動置換
 function transformContent(content: string): string {
     let transformed = content;
 
-    // ---------------------------------------------------------
-    // 1. Heading Normalization (Add IDs) - Japanese Friendly
-    // ---------------------------------------------------------
-    // H2, H3にIDを付与。既存IDがある場合は保持。
+    // A. ID付与 (日本語を削除せず、スペースをハイフンに換えるだけ)
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
-        // すでにID属性があれば何もしない（microCMSで設定済みの場合など）
-        if (attrs.includes('id=')) {
-            return match;
-        }
-
-        const cleanText = text.replace(/<[^>]*>/g, ""); // タグ除去
-
-        // Japanese Friendly ID Generation
-        // Do NOT remove Japanese characters. Replace spaces with hyphens.
-        let id = cleanText.trim().replace(/\s+/g, "-");
-        // Remove quotes from ID to prevent breaking HTML attributes
-        id = id.replace(/["']/g, "");
-
-        if (!id) {
-            id = `heading-${Math.floor(Math.random() * 100000)}`;
-        }
-
-        return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
+        if (attrs.includes('id=')) return match;
+        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/["']/g, "");
+        const finalId = id || `heading-${Math.floor(Math.random() * 10000)}`;
+        return `<h${level}${attrs} id="${finalId}">${text}</h${level}>`;
     });
 
-    // ---------------------------------------------------------
-    // 2. Icon Injection (Centralized Map)
-    // ---------------------------------------------------------
+    // B. アイコン一元管理 ＆ 置換
     const iconMap: { [key: string]: string } = {
-        "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
-        "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
-        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
-        "code": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code inline-block mr-2 text-[#4ade80]"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
-        "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>',
-        "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
-        "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+        "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
+        "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
+        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path></svg>',
+        "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>',
+        "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
     };
-    // Safe Replace using Lookbehind to avoid attribute replacement
     const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'g');
     transformed = transformed.replace(pattern, (match) => iconMap[match] || match);
 
-    // ---------------------------------------------------------
-    // 3. UI Component Construction
-    // ---------------------------------------------------------
-
-    // Warning Box
-    const warningKeywords = /([【\[]?(警告|注意|重要|WARNING|CAUTION|⚠️)[】\]]:?:?\s*)/i;
-    transformed = transformed.replace(
-        new RegExp(`<p>${warningKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
-        `<div class="warning-box">
-            <div class="warning-icon"><span class="material-symbols-outlined">warning</span></div>
-            <div class="warning-body">
-                <p class="warning-title">$2</p>
-                <p class="warning-content">$3</p>
-            </div>
-        </div>`
-    );
-
-    // Highlight Box
-    const highlightKeywords = /([【\[]?(ポイント|ヒント|メモ|注目|注目のポイント|コツ|TIP|POINT|NOTE|💡)[】\]]:?:?\s*)/i;
-    transformed = transformed.replace(
-        new RegExp(`<p>${highlightKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
-        `<div class="highlight-box">
-            <div class="highlight-icon"><span class="material-symbols-outlined">lightbulb</span></div>
-            <div class="highlight-body">
-                <p class="highlight-title">$2</p>
-                <p class="highlight-content">$3</p>
-            </div>
-        </div>`
-    );
-
-    // Success Box
-    const successKeywords = /([【\[]?(成功事例|実績|事例|成果|SUCCESS|CASE|🏆)[】\]]:?:?\s*)/i;
-    transformed = transformed.replace(
-        new RegExp(`<p>${successKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
-        `<div class="success-box">
-            <div class="success-icon"><span class="material-symbols-outlined">emoji_events</span></div>
-            <div class="success-body">
-                <p class="success-title">$2</p>
-                <p class="success-content">$3</p>
-            </div>
-        </div>`
-    );
-
-    // Info Box
-    const infoKeywords = /([【\[]?(情報|参考|補足|解説|INFO|REFERENCE|ℹ️)[】\]]:?:?\s*)/i;
-    transformed = transformed.replace(
-        new RegExp(`<p>${infoKeywords.source}([\\s\\S]*?)</p>`, 'gi'),
-        `<div class="info-box">
-            <div class="info-icon"><span class="material-symbols-outlined">info</span></div>
-            <div class="info-body">
-                <p class="info-title">$2</p>
-                <p class="info-content">$3</p>
-            </div>
-        </div>`
-    );
-
-    // Check List
-    transformed = transformed.replace(
-        /<li>([✓✅☑️]\s*)(.*?)<\/li>/gi,
-        `<li class="check-item"><span class="material-symbols-outlined check-icon">check_circle</span>$2</li>`
-    );
-
-    // Blockquote
-    transformed = transformed.replace(
-        /<blockquote>([\s\S]*?)<\/blockquote>/gi,
-        `<blockquote class="cyber-quote">$1</blockquote>`
-    );
-
-    // Table Wrapper (Mobile Scroll)
-    transformed = transformed.replace(/<table/gi, '<div class="table-wrapper"><table').replace(/<\/table>/gi, '</table></div>');
-
-    // Text Replacement (Branding)
-    transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。");
-    transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
-
+    // C. ブランディング置換
+    transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。")
+        .replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
     return transformed;
 }
 
-export default async function BlogDetailPage({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+export default async function BlogDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const blog = await getBlogById(id);
-
-    if (!blog) {
-        notFound();
-    }
+    if (!blog) notFound();
 
     const contentWithEnhancements = transformContent(blog.content);
     const toc = generateTOC(contentWithEnhancements);
 
     return (
-        <div
-            className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen`}
-        >
-            {/* Material Symbols */}
-            <link
-                href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-                rel="stylesheet"
-            />
-
-            {/* 拡張スタイル */}
+        <div className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen`}>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
             <style>{`
-                .blog-content {
-                    font-size: 1.05rem;
-                    line-height: 2;
-                    color: #d1d5db;
-                }
-                
-                /* =========================================
-                   SYSTEM DESIGN: Unified Luxury Headers
-                   ========================================= */
-                /* H2: 3XL Standard (1.875rem) with !important as requested */
-                article .blog-content h2 {
-                    font-size: 1.875rem !important; /* text-3xl Standard */
-                    line-height: 1.3 !important;
-                    font-weight: 700 !important;   /* Bold */
-                    color: #fff !important;
-                    margin-top: 4rem !important;
-                    margin-bottom: 2rem !important;
-                    padding-bottom: 0.75rem !important;
-                    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 0.75rem !important;
-                    text-transform: none !important;
-                }
-                
-                article .blog-content h2::before {
-                    content: "●";
-                    color: #0df259;
-                    font-size: 0.6em;
-                    margin-right: 0.25rem;
-                }
-
-                /* H3: Standard text-xl (1.25rem) */
-                article .blog-content h3 {
-                    font-size: 1.25rem !important; /* text-xl */
-                    font-weight: 700 !important;
-                    color: #e5e7eb !important;
-                    margin-top: 2.5rem !important;
-                    margin-bottom: 1.25rem !important;
-                    border-left: 3px solid #0df259;
-                    padding-left: 1rem !important;
-                    display: flex !important;
-                    align-items: center !important;
-                }
-
-                /* =========================================
-                   SPECIFIC OVERRIDE: Explosive Speed (hc9vbcn3ue)
-                   ========================================= */
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
-                    font-size: 2.25rem !important; /* text-4xl !important */
-                    font-weight: 900 !important;   /* font-black !important */
-                    text-transform: uppercase !important; /* UPPERCASE !important */
-                    color: #4ade80 !important;
-                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
-                    letter-spacing: 0.05em !important;
-                }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2::before {
-                    content: "▎"; /* Restore block indicator for this post */
-                    color: #0df259;
-                    font-size: 0.8em;
-                }
-
-                /* Common Icon Sizing */
-                article .blog-content h2 svg,
-                article .blog-content h3 svg {
-                    width: 1.1em !important;
-                    height: 1.1em !important;
-                }
-
-                /* Paragraphs */
-                .blog-content p {
-                    margin-bottom: 1.75rem;
-                }
-                
-                /* Emphasis */
-                .blog-content strong {
-                    color: #0df259;
-                    font-weight: 700;
-                }
-                
-                /* Lists */
-                .blog-content ul, .blog-content ol {
-                    margin-left: 1.5rem;
-                    margin-bottom: 2rem;
-                }
-                .blog-content li {
-                    margin-bottom: 0.5rem;
-                    position: relative;
-                }
-                
-                /* Links */
-                .blog-content a {
-                    color: #0df259;
-                    text-decoration: underline;
-                    text-underline-offset: 3px;
-                    transition: all 0.2s;
-                }
-                .blog-content a:hover {
-                    color: #fff;
-                    background: rgba(13, 242, 89, 0.1);
-                }
-                
-                /* Code Blocks */
-                .blog-content pre {
-                    background: #0a0a0a;
-                    border: 1px solid rgba(13, 242, 89, 0.2);
-                    border-radius: 0.75rem;
-                    padding: 1.5rem;
-                    overflow-x: auto;
-                    margin-bottom: 2rem;
-                    font-family: 'JetBrains Mono', monospace;
-                    font-size: 0.875rem;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                }
-                .blog-content code {
-                    background: rgba(13, 242, 89, 0.1);
-                    color: #0df259;
-                    padding: 0.2rem 0.5rem;
-                    border-radius: 0.25rem;
-                    font-size: 0.9em;
-                    font-family: 'JetBrains Mono', monospace;
-                }
-                .blog-content pre code {
-                    background: none;
-                    color: #d1d5db;
-                    padding: 0;
-                }
-                
-                /* Blockquote */
-                .blog-content blockquote {
-                    border-left: 3px solid #0df259;
-                    padding-left: 1.25rem;
-                    margin: 2.5rem 0;
-                    color: #9ca3af;
-                    font-style: italic;
-                    background: rgba(13, 242, 89, 0.05);
-                    padding: 1.5rem;
-                    border-radius: 0 0.5rem 0.5rem 0;
-                }
-                
-                /* Images */
-                .blog-content img {
-                    border-radius: 0.75rem;
-                    margin: 2.5rem 0;
-                    border: 1px solid rgba(255,255,255,0.1);
-                    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-                }
-                
-                /* 警告ボックス */
-                .warning-box {
-                    display: flex;
-                    gap: 1rem;
-                    align-items: flex-start;
-                    background: linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(245,158,11,0.1) 100%);
-                    border: 1px solid rgba(239,68,68,0.3);
-                    border-radius: 0.75rem;
-                    padding: 1.5rem;
-                    margin: 2.5rem 0;
-                }
-                .warning-icon {
-                    flex-shrink: 0;
-                }
-                .warning-icon .material-symbols-outlined {
-                    color: #f87171;
-                    font-size: 1.75rem;
-                }
-                .warning-title {
-                    color: #fca5a5;
-                    font-weight: 700;
-                    margin-bottom: 0.25rem !important;
-                    font-size: 0.875rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                }
-                .warning-content {
-                    color: #fef2f2;
-                    margin-bottom: 0 !important;
-                }
-                
-                /* ハイライトボックス */
-                .highlight-box {
-                    display: flex;
-                    gap: 1rem;
-                    align-items: flex-start;
-                    background: linear-gradient(135deg, rgba(13,242,89,0.1) 0%, rgba(6,182,212,0.1) 100%);
-                    border: 1px solid rgba(13,242,89,0.3);
-                    border-radius: 0.75rem;
-                    padding: 1.5rem;
-                    margin: 2.5rem 0;
-                }
-                .highlight-icon {
-                    flex-shrink: 0;
-                }
-                .highlight-icon .material-symbols-outlined {
-                    color: #0df259;
-                    font-size: 1.75rem;
-                }
-                .highlight-title {
-                    color: #0df259;
-                    font-weight: 700;
-                    margin-bottom: 0.25rem !important;
-                    font-size: 0.875rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                }
-                .highlight-content {
-                    color: #ecfdf5;
-                    margin-bottom: 0 !important;
-                }
-                
-                /* チェックアイテム */
-                .check-item {
-                    display: flex;
-                    align-items: flex-start;
-                    gap: 0.5rem;
-                    list-style: none !important;
-                    margin-left: -1.5rem !important;
-                }
-                .check-icon {
-                    color: #0df259;
-                    font-size: 1.25rem;
-                    flex-shrink: 0;
-                    margin-top: 0.125rem;
-                }
-                
-                /* 成功事例ボックス（ゴールド） */
-                .success-box {
-                    display: flex;
-                    gap: 1rem;
-                    align-items: flex-start;
-                    background: linear-gradient(135deg, rgba(251,191,36,0.1) 0%, rgba(245,158,11,0.1) 100%);
-                    border: 1px solid rgba(251,191,36,0.4);
-                    border-radius: 0.75rem;
-                    padding: 1.5rem;
-                    margin: 2.5rem 0;
-                }
-                .success-icon {
-                    flex-shrink: 0;
-                }
-                .success-icon .material-symbols-outlined {
-                    color: #fbbf24;
-                    font-size: 1.75rem;
-                }
-                .success-title {
-                    color: #fcd34d;
-                    font-weight: 700;
-                    margin-bottom: 0.25rem !important;
-                    font-size: 0.875rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                }
-                .success-content {
-                    color: #fef3c7;
-                    margin-bottom: 0 !important;
-                }
-                
-                /* 情報ボックス（シアン） */
-                .info-box {
-                    display: flex;
-                    gap: 1rem;
-                    align-items: flex-start;
-                    background: linear-gradient(135deg, rgba(6,182,212,0.1) 0%, rgba(59,130,246,0.1) 100%);
-                    border: 1px solid rgba(6,182,212,0.4);
-                    border-radius: 0.75rem;
-                    padding: 1.5rem;
-                    margin: 2.5rem 0;
-                }
-                .info-icon {
-                    flex-shrink: 0;
-                }
-                .info-icon .material-symbols-outlined {
-                    color: #06b6d4;
-                    font-size: 1.75rem;
-                }
-                .info-title {
-                    color: #67e8f9;
-                    font-weight: 700;
-                    margin-bottom: 0.25rem !important;
-                    font-size: 0.875rem;
-                    text-transform: uppercase;
-                    letter-spacing: 0.05em;
-                }
-                .info-content {
-                    color: #ecfeff;
-                    margin-bottom: 0 !important;
-                }
-                
-                /* サイバー引用（強調blockquote） */
-                .cyber-quote {
-                    position: relative;
-                    border-left: 4px solid #0df259;
-                    background: linear-gradient(135deg, rgba(13,242,89,0.08) 0%, rgba(6,182,212,0.05) 100%);
-                    padding: 1.5rem 1.5rem 1.5rem 2rem;
-                    border-radius: 0 0.75rem 0.75rem 0;
-                    margin: 2.5rem 0;
-                    font-style: italic;
-                    color: #d1d5db;
-                }
-                .cyber-quote::before {
-                    content: '"';
-                    position: absolute;
-                    top: 0.5rem;
-                    left: 0.75rem;
-                    font-size: 2.5rem;
-                    color: rgba(13,242,89,0.3);
-                    font-family: serif;
-                    line-height: 1;
-                }
+                .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
+                article .blog-content h2 { font-size: 2rem !important; line-height: 1.3 !important; font-weight: 800 !important; color: #fff !important; margin-top: 4rem !important; margin-bottom: 2rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; }
+                article .blog-content h2::before { content: "●"; color: #0df259; font-size: 0.6em; margin-right: 0.25rem; }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 { font-size: 2.5rem !important; font-weight: 900 !important; text-transform: uppercase !important; color: #4ade80 !important; border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; }
+                article .blog-content h3 { font-size: 1.4rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 2.5rem !important; margin-bottom: 1.25rem !important; border-left: 4px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
+                .blog-content p { margin-bottom: 1.75rem; }
+                .blog-content strong { color: #0df259; font-weight: 700; }
+                .blog-content a { color: #0df259; text-decoration: underline; transition: all 0.2s; }
+                .blog-content a:hover { color: #fff; background: rgba(13, 242, 89, 0.1); }
             `}</style>
 
-            {/* ヒーロー */}
-            <section className="relative pt-32 pb-12 px-6 overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(13,242,89,0.1),transparent_50%)] pointer-events-none"></div>
-                <div className="absolute top-20 right-20 w-72 h-72 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none"></div>
-
+            <section className="relative pt-32 pb-12 px-6">
                 <div className="max-w-4xl mx-auto relative z-10">
-                    {/* パン屑 */}
                     <nav className="flex items-center gap-2 text-sm text-gray-500 mb-8">
-                        <Link href="/" className="hover:text-cyber-primary transition-colors">
-                            Home
-                        </Link>
-                        <span>/</span>
-                        <Link href="/blog" className="hover:text-cyber-primary transition-colors">
-                            Blog
-                        </Link>
-                        <span>/</span>
-                        <span className="text-gray-400 truncate max-w-[200px]">{blog.title}</span>
+                        <Link href="/" className="hover:text-cyber-primary">Home</Link><span>/</span><Link href="/blog" className="hover:text-cyber-primary">Blog</Link><span>/</span><span className="text-gray-400 truncate max-w-[200px]">{blog.title}</span>
                     </nav>
-
-                    {/* カテゴリ */}
-                    {blog.category && blog.category.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-4">
-                            {blog.category.map((cat) => (
-                                <span
-                                    key={cat}
-                                    className="text-xs font-mono px-3 py-1 bg-cyber-primary/10 text-cyber-primary rounded border border-cyber-primary/30"
-                                >
-                                    {cat}
-                                </span>
-                            ))}
-                        </div>
-                    )}
-
-                    {/* タイトル */}
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight mb-6 leading-tight">
-                        {blog.title}
-                    </h1>
-
-                    {/* メタ情報 */}
+                    <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight mb-6 leading-tight">{blog.title}</h1>
                     <div className="flex items-center gap-6 text-gray-500 text-sm font-mono">
-                        <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-base">schedule</span>
-                            {formatDate(blog.publishedAt)}
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <span className="material-symbols-outlined text-base">timer</span>
-                            約{Math.max(3, Math.ceil(blog.content.length / 600))}分で読めます
-                        </div>
+                        <div className="flex items-center gap-2"><span className="material-symbols-outlined text-base">schedule</span>{formatDate(blog.publishedAt)}</div>
+                        <div className="flex items-center gap-2"><span className="material-symbols-outlined text-base">timer</span>約{Math.max(3, Math.ceil(blog.content.length / 600))}分で読めます</div>
                     </div>
                 </div>
             </section>
 
-            {/* サムネイル */}
-            {blog.thumbnail && (
-                <section className="px-6 pb-12">
-                    <div className="max-w-4xl mx-auto">
-                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_30px_rgba(13,242,89,0.1)]">
-                            <Image
-                                src={blog.thumbnail.url}
-                                alt={blog.title}
-                                fill
-                                className="object-cover"
-                                priority
-                            />
-                        </div>
-                    </div>
-                </section>
-            )}
-
-            {/* 本文 + サイドバー */}
             <section className="px-6 pb-24">
                 <div className="max-w-6xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-                        {/* 目次（デスクトップ・モバイル強制表示） */}
                         {toc.length > 0 && (
                             <aside className="lg:col-span-1 block">
                                 <div className="sticky top-32 p-6 bg-slate-900/50 border border-white/10 rounded-xl backdrop-blur-sm">
-                                    <h3 className="text-sm font-black text-cyber-primary mb-4 flex items-center gap-2 uppercase tracking-wider">
-                                        <span className="material-symbols-outlined text-base">toc</span>
-                                        Table of Contents
-                                    </h3>
+                                    <h3 className="text-sm font-black text-cyber-primary mb-4 uppercase tracking-wider">Table of Contents</h3>
                                     <nav className="space-y-3">
                                         {toc.map((item, index) => (
-                                            <a
-                                                key={index}
-                                                href={`#${item.id}`}
-                                                className={`block text-sm text-gray-400 hover:text-cyber-primary hover:bg-white/5 p-1 rounded transition-all leading-6 ${item.level === 3 ? "pl-4 text-xs" : "font-bold"
-                                                    }`}
-                                                dangerouslySetInnerHTML={{ __html: item.html }}
-                                            />
+                                            <a key={index} href={`#${item.id}`} className={`block text-sm text-gray-400 hover:text-cyber-primary hover:bg-white/5 p-1 rounded transition-all leading-6 ${item.level === 3 ? "pl-4 text-xs" : "font-bold"}`}>{item.html}</a>
                                         ))}
                                     </nav>
                                 </div>
                             </aside>
                         )}
-
-                        {/* 本文 */}
-                        <article
-                            data-post-id={id}
-                            className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}
-                        >
-                            <div
-                                className="blog-content prose prose-invert prose-green max-w-none"
-                                dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
-                            />
+                        <article data-post-id={id} className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
+                            <div className="blog-content prose prose-invert prose-green max-w-none" dangerouslySetInnerHTML={{ __html: contentWithEnhancements }} />
                         </article>
                     </div>
                 </div>
             </section>
 
-            {/* プラン紹介セクション */}
-            <section className="py-16 px-6 bg-gradient-to-b from-slate-900/50 to-transparent border-t border-white/5">
-                <div className="max-w-5xl mx-auto">
-                    <div className="text-center mb-12">
-                        <span className="text-cyber-primary font-mono text-sm tracking-[0.3em] uppercase mb-2 block">
-                            PRICING_PLAN.SYS
-                        </span>
-                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                            高品質なWebサイトを制作しませんか？
-                        </h2>
-                        <p className="text-gray-400 max-w-2xl mx-auto">
-                            FROG Studioでは、すべてのプランで<span className="text-cyber-primary font-bold">構造化マークアップを標準装備</span>。
-                            AI時代の検索対策も万全です。
-                        </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {PLANS.map((plan) => (
-                            <div
-                                key={plan.name}
-                                className={`relative bg-slate-900/80 border rounded-xl p-6 transition-all duration-300 hover:border-${plan.color}/50 hover:shadow-[0_0_30px_rgba(13,242,89,0.1)] ${plan.popular
-                                    ? "border-amber-400/50 ring-2 ring-amber-400/20"
-                                    : "border-white/10"
-                                    }`}
-                            >
-                                {plan.popular && (
-                                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-black text-xs font-bold rounded-full">
-                                        ★ おすすめ
-                                    </div>
-                                )}
-
-                                <div className="text-center mb-4">
-                                    <span className={`text-${plan.color} font-mono text-sm font-bold`}>
-                                        {plan.name}
-                                    </span>
-                                    <div className="text-white font-bold mt-1">{plan.catchphrase}</div>
-                                </div>
-
-                                <div className="text-center mb-4">
-                                    <span className="text-3xl font-black text-white">¥{plan.price}</span>
-                                    <span className="text-gray-500 text-sm">〜</span>
-                                </div>
-
-                                <ul className="space-y-2 mb-6">
-                                    {plan.features.map((feature) => (
-                                        <li key={feature} className="flex items-center gap-2 text-sm text-gray-400">
-                                            <span className={`material-symbols-outlined text-base text-${plan.color}`}>
-                                                check_circle
-                                            </span>
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <Link
-                                    href="/#contact"
-                                    className={`block w-full py-3 text-center font-bold rounded transition-all ${plan.popular
-                                        ? "bg-gradient-to-r from-amber-400 to-orange-500 text-black hover:shadow-lg"
-                                        : "bg-cyber-primary/10 text-cyber-primary border border-cyber-primary/30 hover:bg-cyber-primary hover:text-black"
-                                        }`}
-                                >
-                                    このプランで相談
-                                </Link>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA セクション */}
-            <section className="py-16 px-6 bg-gradient-to-r from-cyber-deepEmerald/20 to-cyan-900/20 border-t border-b border-cyber-primary/20">
-                <div className="max-w-4xl mx-auto text-center">
-                    <span className="material-symbols-outlined text-cyber-primary text-5xl mb-4 block">
-                        rocket_launch
-                    </span>
-                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-                        まずは無料相談から
-                    </h2>
-                    <p className="text-gray-400 mb-8 max-w-2xl mx-auto">
-                        「こんなサイトは作れる？」「予算感は？」など、
-                        どんな些細なことでもお気軽にご相談ください。
-                        <span className="text-cyber-primary font-bold">チャット・メールで完結</span>するので、
-                        打ち合わせの時間も不要です。
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link
-                            href="/#works"
-                            className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-white/20 text-white hover:bg-white/5 hover:border-cyber-primary/50 font-bold rounded tracking-wider transition-all"
-                        >
-                            <span className="material-symbols-outlined">work</span>
-                            制作実績を見る
-                        </Link>
-                        <Link
-                            href="/#contact"
-                            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-cyber-primary text-black font-bold rounded tracking-wider hover:bg-white transition-colors"
-                        >
-                            <span className="material-symbols-outlined">mail</span>
-                            無料相談を申し込む
-                        </Link>
-                    </div>
-                </div>
-            </section>
-
-            {/* ブログ一覧へ戻る */}
-            <section className="py-12 px-6">
-                <div className="max-w-4xl mx-auto text-center">
-                    <Link
-                        href="/blog"
-                        className="inline-flex items-center gap-2 text-gray-400 hover:text-cyber-primary transition-colors"
-                    >
-                        <span className="material-symbols-outlined">arrow_back</span>
-                        ブログ一覧へ戻る
-                    </Link>
-                </div>
-            </section>
+            <section className="py-12 px-6 text-center"><Link href="/blog" className="inline-flex items-center gap-2 text-gray-400 hover:text-cyber-primary"><span className="material-symbols-outlined">arrow_back</span>ブログ一覧へ戻る</Link></section>
         </div>
     );
 }
