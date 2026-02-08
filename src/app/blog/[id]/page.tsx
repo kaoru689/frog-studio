@@ -586,7 +586,7 @@ export default async function BlogDetailPage({
                                 <div className="mb-12 rounded-xl overflow-hidden border border-cyber-primary/30 shadow-[0_0_30px_rgba(13,242,89,0.2)] group relative">
                                     <div className="absolute inset-0 bg-cyber-primary/10 mix-blend-overlay group-hover:bg-cyber-primary/0 transition-all duration-500 pointer-events-none"></div>
                                     <Image
-                                        src="/images/cyber_ai_speed.jpg"
+                                        src="/images/cyber_ai_speed.png"
                                         alt="AI Visibility - Speed & Intelligence"
                                         width={1200}
                                         height={675}
