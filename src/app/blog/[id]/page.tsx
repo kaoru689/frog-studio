@@ -582,24 +582,30 @@ export default async function BlogDetailPage({
                         {/* 本文 */}
                         <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
                             {/* AI Visibility記事専用の特別画像 */}
-                            {blog.title.includes("AI Visibility") && (
-                                <div className="mb-12 rounded-xl overflow-hidden border border-cyber-primary/30 shadow-[0_0_30px_rgba(13,242,89,0.2)] group relative">
-                                    <div className="absolute inset-0 bg-cyber-primary/10 mix-blend-overlay group-hover:bg-cyber-primary/0 transition-all duration-500 pointer-events-none"></div>
-                                    <Image
-                                        src="/images/cyber_ai_speed.png"
-                                        alt="AI Visibility - Speed & Intelligence"
-                                        width={1200}
-                                        height={675}
-                                        className="w-full object-cover transform hover:scale-105 transition-transform duration-700"
-                                        priority
-                                    />
-                                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 pointer-events-none">
-                                        <p className="text-cyber-primary font-mono text-sm tracking-wider">
-                                            AI_VISIBILITY_PROTOCOL // INITIATED
-                                        </p>
+                            {(function () {
+                                const title = (blog.title || "").normalize("NFKC");
+                                const isTarget = title.includes("AI Visibility") || (title.includes("AI") && title.includes("Visibility"));
+                                if (!isTarget) return null;
+
+                                return (
+                                    <div className="mb-12 rounded-xl overflow-hidden border border-cyber-primary/30 shadow-[0_0_30px_rgba(13,242,89,0.2)] group relative">
+                                        <div className="absolute inset-0 bg-cyber-primary/10 mix-blend-overlay group-hover:bg-cyber-primary/0 transition-all duration-500 pointer-events-none"></div>
+                                        <Image
+                                            src="/images/cyber_ai_speed.png"
+                                            alt="AI Visibility - Speed & Intelligence"
+                                            width={1200}
+                                            height={675}
+                                            className="w-full object-cover transform hover:scale-105 transition-transform duration-700"
+                                            priority
+                                        />
+                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 pointer-events-none">
+                                            <p className="text-cyber-primary font-mono text-sm tracking-wider">
+                                                AI_VISIBILITY_PROTOCOL // INITIATED
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                );
+                            })()}
                             <div
                                 className="blog-content prose prose-invert prose-green max-w-none"
                                 dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
