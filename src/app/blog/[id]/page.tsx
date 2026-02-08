@@ -298,23 +298,23 @@ export default async function BlogDetailPage({
                 }
                 /* 強制適用：詳細度を上げるために article を付与 */
                 article .blog-content h2 {
-                    font-size: 3rem !important; /* text-5xl */
-                    line-height: 1.2 !important;
-                    font-weight: 900 !important; /* font-black */
+                    font-size: 2.5rem !important; /* text-4xl Balanced Luxury */
+                    line-height: 1.3 !important;
+                    font-weight: 800 !important; /* ExtraBold */
                     color: #4ade80 !important;
-                    margin-top: 5rem !important; /* mt-20 */
-                    margin-bottom: 2.5rem !important; /* mb-10 */
-                    padding-bottom: 1rem !important;
-                    border-bottom: 4px solid rgba(13, 242, 89, 0.6) !important;
+                    margin-top: 4rem !important; /* mt-16 */
+                    margin-bottom: 2rem !important; /* mb-8 */
+                    padding-bottom: 0.75rem !important;
+                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
                     display: flex !important;
                     align-items: center !important;
-                    gap: 1rem !important;
+                    gap: 0.75rem !important;
                     text-transform: uppercase !important;
-                    letter-spacing: 0.1em !important;
+                    letter-spacing: 0.05em !important;
                 }
                 article .blog-content h2 svg {
-                    width: 1em !important;
-                    height: 1em !important;
+                    width: 1.1em !important;
+                    height: 1.1em !important;
                 }
                 article .blog-content h2::before {
                     content: "▎";
@@ -323,14 +323,14 @@ export default async function BlogDetailPage({
                     margin-right: 0.25rem;
                 }
                 article .blog-content h3 {
-                    font-size: 1.875rem !important; /* text-3xl */
-                    font-weight: 900 !important;
+                    font-size: 1.75rem !important; /* text-2xl */
+                    font-weight: 700 !important;
                     color: #fff !important;
-                    margin-top: 4rem !important; /* mt-16 */
-                    margin-bottom: 2rem !important; /* mb-8 */
+                    margin-top: 3rem !important; /* mt-12 */
+                    margin-bottom: 1.5rem !important; /* mb-6 */
                     display: flex !important;
                     align-items: center !important;
-                    gap: 0.75rem !important;
+                    gap: 0.5rem !important;
                 }
                 article .blog-content h3 svg {
                     width: 1.1em !important;
