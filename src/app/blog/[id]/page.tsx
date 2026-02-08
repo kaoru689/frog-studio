@@ -1,3 +1,4 @@
+
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -93,24 +94,23 @@ function formatDate(dateString: string) {
 }
 
 // ==========================================
-// SYSTEM CORE: Universal TOC Generator
+// SYSTEM CORE: Universal TOC Generator (Revised)
 // ==========================================
-// ID属性の位置やクォートの種類、改行に依存しない究極の正規表現(Japanese Compatibility)
-// 目的: あらゆる形式のHTMLからH2/H3を抽出し、目次配列を生成する
+// ユーザー指定: /<h([23]).*?id=["']([^"']*)["'].*?>(.*?)<\/h[23]>/gi
+// 目的: 属性の位置、クォートの種類(" or ')、日本語IDに対応し、Toc配列を生成する
+// Dot matches all characters including newlines (implemented as [\s\S] for safety)
 function generateTOC(content: string) {
     // Regex explanation:
-    // <h([23])       Match h2 or h3 start
-    // .*?            Lazily match any character (including newlines via \s\S)
-    // id="([^"]*)"   Match the id attribute and capture the value (even empty)
-    // .*?            Lazily match any character
-    // >              End of opening tag
-    // (.*?)          Capture inner content
-    // <\/h[23]>      Match closing tag
-    // Note: The user requested /<h([23]).*?id="([^"]*)".*?>(.*?)<\/h[23]>/gi
-    // However, JS regex dot (.) does not match newlines by default without 's' flag (which is not standard in older environments but OK in modern).
-    // To be perfectly safe and compliant with user request while ensuring multiline support, we use [\s\S] instead of dot where appropriate or assume single line headers.
-    // The user's regex: /<h([23]).*?id="([^"]*)".*?>(.*?)<\/h[23]>/gi
-    const headingRegex = /<h([23])[\s\S]*?id="([^"]*)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
+    // <h([23])          Match H2/H3 start tag
+    // [\s\S]*?          Lazy match any char (including newline) until id=
+    // id=["']           Match id= followed by single or double quote
+    // ([^"']*)          Capture the ID value (any char except quote) - allows Japanese
+    // ["']              Match closing quote
+    // [\s\S]*?          Lazy match until >
+    // >                 End of opening tag
+    // ([\s\S]*?)        Capture inner content
+    // <\/h[23]>         Match closing tag
+    const headingRegex = /<h([23])[\s\S]*?id=["']([^"']*)["'][\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
 
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
@@ -129,16 +129,16 @@ function generateTOC(content: string) {
 }
 
 // ==========================================
-// SYSTEM CORE: Content Transformer
+// SYSTEM CORE: Content Transformer (Updated)
 // ==========================================
-// 1. Heading Normalization (Add IDs) - Japanese Friendly
-// 2. Icon Injection
-// 3. UI Component Construction (Boxes)
+// 1. Heading Normalization (Japanese Friendly IDs)
+// 2. Icon Injection (Centralized)
+// 3. UI Component Construction
 function transformContent(content: string): string {
     let transformed = content;
 
     // ---------------------------------------------------------
-    // 1. Heading Normalization (Japanese Compatible)
+    // 1. Heading Normalization (Add IDs) - Japanese Friendly
     // ---------------------------------------------------------
     // H2, H3にIDを付与。既存IDがある場合は保持。
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
@@ -149,10 +149,11 @@ function transformContent(content: string): string {
 
         const cleanText = text.replace(/<[^>]*>/g, ""); // タグ除去
 
-        // Japanese Compatible ID Generation
-        // Remove spaces and special control chars, but keep Japanese and other unicode chars.
-        // Fallback to random ID only if result is empty.
+        // Japanese Friendly ID Generation
+        // Do NOT remove Japanese characters. Replace spaces with hyphens.
         let id = cleanText.trim().replace(/\s+/g, "-");
+        // Remove quotes from ID to prevent breaking HTML attributes
+        id = id.replace(/["']/g, "");
 
         if (!id) {
             id = `heading-${Math.floor(Math.random() * 100000)}`;
@@ -280,7 +281,7 @@ export default async function BlogDetailPage({
                 rel="stylesheet"
             />
 
-            {/* 拡張スタイル: システムレベルで統一された高級感 + Specific Override */}
+            {/* 拡張スタイル */}
             <style>{`
                 .blog-content {
                     font-size: 1.05rem;
@@ -291,7 +292,7 @@ export default async function BlogDetailPage({
                 /* =========================================
                    SYSTEM DESIGN: Unified Luxury Headers
                    ========================================= */
-                /* H2: 3XL Standard (1.875rem) */
+                /* H2: 3XL Standard (1.875rem) with !important as requested */
                 article .blog-content h2 {
                     font-size: 1.875rem !important; /* text-3xl Standard */
                     line-height: 1.3 !important;
@@ -314,7 +315,7 @@ export default async function BlogDetailPage({
                     margin-right: 0.25rem;
                 }
 
-                /* H3: Standard */
+                /* H3: Standard text-xl (1.25rem) */
                 article .blog-content h3 {
                     font-size: 1.25rem !important; /* text-xl */
                     font-weight: 700 !important;
