@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
+import { renderToStaticMarkup } from 'react-dom/server';
+import { TrendingDown, Lightbulb, Brain, CheckCircle, AlertTriangle, Info, Trophy } from 'lucide-react';
 
 // フォント設定
 const spaceGrotesk = Space_Grotesk({
@@ -211,6 +213,7 @@ function transformContent(content: string): string {
     transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
 
 
+
     // ========================================
     // テーブル（表）をスマホ対応（横スクロール）
     // ========================================
@@ -221,6 +224,23 @@ function transformContent(content: string): string {
         /<\/table>/gi,
         '</table></div>'
     );
+
+    // ========================================
+    // アイコン自動置換
+    // キーワード: trending_down, lightbulb, psychology -> Icon
+    // ========================================
+    const iconMap = {
+        "trending_down": <TrendingDown className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
+        "lightbulb": <Lightbulb className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
+        "psychology": <Brain className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
+    };
+
+    Object.entries(iconMap).forEach(([keyword, icon]) => {
+        const svgString = renderToStaticMarkup(icon);
+        // キーワードの前後にスペースがあるか、行頭・行末の場合のみ置換
+        // HTMLタグの中身（属性値など）を誤爆しないように簡易的な対策
+        transformed = transformed.replace(new RegExp(`(^|\\s|>)(${keyword})(\\s|<|$)`, 'g'), `$1${svgString}$3`);
+    });
 
     return transformed;
 }
