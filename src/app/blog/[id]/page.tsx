@@ -1,4 +1,3 @@
-
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -96,18 +95,22 @@ function formatDate(dateString: string) {
 // ==========================================
 // SYSTEM CORE: Universal TOC Generator
 // ==========================================
-// ID属性の位置やクォートの種類、改行に依存しない究極の正規表現
+// ID属性の位置やクォートの種類、改行に依存しない究極の正規表現(Japanese Compatibility)
 // 目的: あらゆる形式のHTMLからH2/H3を抽出し、目次配列を生成する
 function generateTOC(content: string) {
     // Regex explanation:
     // <h([23])       Match h2 or h3 start
-    // [\s\S]*?       Lazily match any character (including newlines) until...
-    // id="([^"]+)"   Match the id attribute and capture the value
-    // [\s\S]*?       Lazily match any character until...
+    // .*?            Lazily match any character (including newlines via \s\S)
+    // id="([^"]*)"   Match the id attribute and capture the value (even empty)
+    // .*?            Lazily match any character
     // >              End of opening tag
-    // ([\s\S]*?)     Capture inner content
+    // (.*?)          Capture inner content
     // <\/h[23]>      Match closing tag
-    const headingRegex = /<h([23])[\s\S]*?id="([^"]+)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
+    // Note: The user requested /<h([23]).*?id="([^"]*)".*?>(.*?)<\/h[23]>/gi
+    // However, JS regex dot (.) does not match newlines by default without 's' flag (which is not standard in older environments but OK in modern).
+    // To be perfectly safe and compliant with user request while ensuring multiline support, we use [\s\S] instead of dot where appropriate or assume single line headers.
+    // The user's regex: /<h([23]).*?id="([^"]*)".*?>(.*?)<\/h[23]>/gi
+    const headingRegex = /<h([23])[\s\S]*?id="([^"]*)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
 
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
@@ -128,14 +131,14 @@ function generateTOC(content: string) {
 // ==========================================
 // SYSTEM CORE: Content Transformer
 // ==========================================
-// 1. Heading Normalization (Add IDs)
+// 1. Heading Normalization (Add IDs) - Japanese Friendly
 // 2. Icon Injection
 // 3. UI Component Construction (Boxes)
 function transformContent(content: string): string {
     let transformed = content;
 
     // ---------------------------------------------------------
-    // 1. Heading Normalization
+    // 1. Heading Normalization (Japanese Compatible)
     // ---------------------------------------------------------
     // H2, H3にIDを付与。既存IDがある場合は保持。
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
@@ -145,13 +148,15 @@ function transformContent(content: string): string {
         }
 
         const cleanText = text.replace(/<[^>]*>/g, ""); // タグ除去
-        // 日本語対応ID生成: 英数字変換せず、エンコードもブラウザ任せで良いが、
-        // ここでは安全のため英数字変換ロジックを採用（必要に応じて変更可）
-        // 今回は "safe-id" 生成ロジック: 英数字以外を除去
-        const id = cleanText.toLowerCase()
-            .replace(/\s+/g, "-")
-            .replace(/[^\w\-\u0080-\uFFFF]+/g, "") // 日本語もIDに含めるなら \u0080-\uFFFF を残す、今回は英数字のみ
-            || `heading-${Math.random().toString(36).substr(2, 9)}`; // 空になった場合のフォールバック
+
+        // Japanese Compatible ID Generation
+        // Remove spaces and special control chars, but keep Japanese and other unicode chars.
+        // Fallback to random ID only if result is empty.
+        let id = cleanText.trim().replace(/\s+/g, "-");
+
+        if (!id) {
+            id = `heading-${Math.floor(Math.random() * 100000)}`;
+        }
 
         return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
     });
@@ -275,7 +280,7 @@ export default async function BlogDetailPage({
                 rel="stylesheet"
             />
 
-            {/* 拡張スタイル: システムレベルで統一された高級感 */}
+            {/* 拡張スタイル: システムレベルで統一された高級感 + Specific Override */}
             <style>{`
                 .blog-content {
                     font-size: 1.05rem;
@@ -286,44 +291,60 @@ export default async function BlogDetailPage({
                 /* =========================================
                    SYSTEM DESIGN: Unified Luxury Headers
                    ========================================= */
-                /* H2: 圧倒的な存在感と可読性を両立する"Universal Standard" */
+                /* H2: 3XL Standard (1.875rem) */
                 article .blog-content h2 {
-                    font-size: 2.25rem !important; /* text-4xl相当: あらゆる記事でこのサイズを基準とする */
+                    font-size: 1.875rem !important; /* text-3xl Standard */
                     line-height: 1.3 !important;
-                    font-weight: 800 !important;   /* ExtraBold: 視認性を担保 */
+                    font-weight: 700 !important;   /* Bold */
                     color: #fff !important;
                     margin-top: 4rem !important;
                     margin-bottom: 2rem !important;
                     padding-bottom: 0.75rem !important;
-                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; /* Cyber Green Accent */
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
                     display: flex !important;
                     align-items: center !important;
                     gap: 0.75rem !important;
-                    letter-spacing: 0.03em !important;
+                    text-transform: none !important;
                 }
                 
                 article .blog-content h2::before {
-                    content: "▎";
+                    content: "●";
+                    color: #0df259;
+                    font-size: 0.6em;
+                    margin-right: 0.25rem;
+                }
+
+                /* H3: Standard */
+                article .blog-content h3 {
+                    font-size: 1.25rem !important; /* text-xl */
+                    font-weight: 700 !important;
+                    color: #e5e7eb !important;
+                    margin-top: 2.5rem !important;
+                    margin-bottom: 1.25rem !important;
+                    border-left: 3px solid #0df259;
+                    padding-left: 1rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                }
+
+                /* =========================================
+                   SPECIFIC OVERRIDE: Explosive Speed (hc9vbcn3ue)
+                   ========================================= */
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
+                    font-size: 2.25rem !important; /* text-4xl !important */
+                    font-weight: 900 !important;   /* font-black !important */
+                    text-transform: uppercase !important; /* UPPERCASE !important */
+                    color: #4ade80 !important;
+                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
+                    letter-spacing: 0.05em !important;
+                }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2::before {
+                    content: "▎"; /* Restore block indicator for this post */
                     color: #0df259;
                     font-size: 0.8em;
                 }
 
-                /* H3: H2に従属しつつ、明確な区分を示す */
-                article .blog-content h3 {
-                    font-size: 1.5rem !important; /* text-2xl相当 */
-                    font-weight: 700 !important;
-                    color: #e5e7eb !important;
-                    margin-top: 3rem !important;
-                    margin-bottom: 1.25rem !important;
-                    border-left: 4px solid #0df259;
-                    padding-left: 1rem !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    background: linear-gradient(90deg, rgba(13, 242, 89, 0.05) 0%, transparent 100%);
-                    border-radius: 0 4px 4px 0;
-                }
-
-                /* アイコンサイズ調整 (H2/H3内) */
+                /* Common Icon Sizing */
                 article .blog-content h2 svg,
                 article .blog-content h3 svg {
                     width: 1.1em !important;
@@ -668,7 +689,10 @@ export default async function BlogDetailPage({
                         )}
 
                         {/* 本文 */}
-                        <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
+                        <article
+                            data-post-id={id}
+                            className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}
+                        >
                             <div
                                 className="blog-content prose prose-invert prose-green max-w-none"
                                 dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
