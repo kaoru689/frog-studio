@@ -95,16 +95,21 @@ function formatDate(dateString: string) {
 }
 
 // 目次生成（h2, h3を抽出）
+// 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
 function generateTOC(content: string) {
-    const headingRegex = /<h([23])[^>]*>(.*?)<\/h[23]>/gi;
-    const toc: { level: number; text: string; id: string }[] = [];
+    // <h2 id="...">...</h2> の形式を想定
+    const headingRegex = /<h([23])(?:[^>]*id="([^"]*)")?[^>]*>(.*?)<\/h[23]>/gi;
+    const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
     while ((match = headingRegex.exec(content)) !== null) {
         const level = parseInt(match[1]);
-        const text = match[2].replace(/<[^>]*>/g, "");
-        const id = text.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\-]/g, "");
-        toc.push({ level, text, id });
+        const id = match[2] || ""; // IDがあれば取得
+        const html = match[3]; // 中身のHTML（アイコン含む）をそのまま取得
+
+        if (id && html) {
+            toc.push({ level, html, id });
+        }
     }
 
     return toc;
@@ -267,8 +272,8 @@ export default async function BlogDetailPage({
         notFound();
     }
 
-    const toc = generateTOC(blog.content);
     const contentWithEnhancements = transformContent(blog.content);
+    const toc = generateTOC(contentWithEnhancements);
 
 
 
@@ -290,11 +295,11 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                 }
                 .blog-content h2 {
-                    font-size: 1.875rem;
+                    font-size: 1.875rem; /* text-3xl approx */
                     font-weight: 700;
                     color: #4ade80;
-                    margin-top: 2.5rem;
-                    margin-bottom: 1rem;
+                    margin-top: 2.5rem; /* mt-10 */
+                    margin-bottom: 1.5rem; /* mb-6 */
                     padding-bottom: 0.75rem;
                     border-bottom: 2px solid rgba(13, 242, 89, 0.4);
                     display: flex;
@@ -306,11 +311,11 @@ export default async function BlogDetailPage({
                     color: #0df259;
                 }
                 .blog-content h3 {
-                    font-size: 1.25rem;
+                    font-size: 1.25rem; /* text-xl */
                     font-weight: 700;
                     color: #fff;
-                    margin-top: 2rem;
-                    margin-bottom: 0.75rem;
+                    margin-top: 2.5rem; /* mt-10 */
+                    margin-bottom: 1.5rem; /* mb-6 */
                 }
                 .blog-content p {
                     margin-bottom: 1.5rem;
@@ -624,9 +629,8 @@ export default async function BlogDetailPage({
                                                 href={`#${item.id}`}
                                                 className={`block text-sm text-gray-400 hover:text-cyber-primary transition-colors ${item.level === 3 ? "pl-4" : ""
                                                     }`}
-                                            >
-                                                {item.text}
-                                            </a>
+                                                dangerouslySetInnerHTML={{ __html: item.html }}
+                                            />
                                         ))}
                                     </nav>
                                 </div>
