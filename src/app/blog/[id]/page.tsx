@@ -41,19 +41,7 @@ function processBlogContent(rawContent: string) {
     let content = rawContent;
     const toc: { level: number; html: string; id: string }[] = [];
 
-    // 1. 見出し処理（ID付与 ＆ TOC生成）
-    content = content.replace(/<h([23])(.*?)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
-        // IDを生成（日本語対応）
-        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/["']/g, "") || `section-${Math.random().toString(36).substr(2, 5)}`;
-
-        // 目次配列に登録
-        toc.push({ level: parseInt(level), html: text.replace(/<[^>]*>/g, ""), id: id });
-
-        // HTMLを書き換え（IDを強制注入）
-        return `<h${level} id="${id}"${attrs}>${text}</h${level}>`;
-    });
-
-    // 2. アイコン置換（flag含む完全版）
+    // 1. アイコン置換（TOC生成前に実行することで、目次から raw テキストを排除）
     const iconMap: { [key: string]: string } = {
         "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
         "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
@@ -61,9 +49,18 @@ function processBlogContent(rawContent: string) {
         "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>',
         "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
         "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
+        "code": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#4ade80]"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
     };
     const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'gi');
     content = content.replace(pattern, (match) => iconMap[match.toLowerCase()] || match);
+
+    // 2. 見出し処理（ID付与 ＆ TOC生成）
+    // 正規表現を強化: [\s\S]*? で改行を含む属性やテキストに完全対応
+    content = content.replace(/<h([23])([\s\S]*?)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
+        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/["']/g, "") || `section-${Math.random().toString(36).substr(2, 5)}`;
+        toc.push({ level: parseInt(level), html: text.replace(/<[^>]*>/g, ""), id: id });
+        return `<h${level} id="${id}"${attrs}>${text}</h${level}>`;
+    });
 
     // 3. その他置換
     content = content.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。")
@@ -85,16 +82,16 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
             <style>{`
                 .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
                 /* =========================================
-                   GLOBAL HEADERS (Balanced)
+                   GLOBAL HEADERS (Balanced & Luxury)
                    ========================================= */
-                /* 全記事共通: 程よいサイズ感 (text-3xl相当) */
+                /* 全記事共通: 2.4rem (text-4xl相当) で高級感を出しつつバランス調整 */
                 article .blog-content h2 { 
-                    font-size: 1.875rem !important; /* text-3xl */
-                    line-height: 1.4 !important;
+                    font-size: 2.4rem !important; /* text-4xl */
+                    line-height: 1.3 !important;
                     font-weight: 800 !important; 
                     color: #fff !important; 
-                    margin-top: 4rem !important; 
-                    margin-bottom: 2rem !important; 
+                    margin-top: 4.5rem !important; 
+                    margin-bottom: 2.25rem !important; 
                     border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; 
                     display: flex !important; 
                     align-items: center !important; 
@@ -130,6 +127,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                 }
                 article .blog-content h3 { font-size: 1.6rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; margin-bottom: 1.5rem !important; border-left: 5px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
                 .blog-content strong { color: #0df259; font-weight: 700; }
+                .blog-content a { color: #0df259; text-decoration: underline; transition: all 0.2s; }
             `}</style>
 
             <section className="relative pt-32 pb-12 px-6">
