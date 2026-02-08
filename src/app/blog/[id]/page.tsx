@@ -5,7 +5,7 @@ import Image from "next/image";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
 import { renderToStaticMarkup } from 'react-dom/server';
-import { TrendingDown, Lightbulb, Brain, CheckCircle, AlertTriangle, Info, Trophy } from 'lucide-react';
+import { TrendingDown, Lightbulb, Brain, Code, Rocket, Flag } from 'lucide-react';
 
 // フォント設定
 const spaceGrotesk = Space_Grotesk({
@@ -227,12 +227,15 @@ function transformContent(content: string): string {
 
     // ========================================
     // アイコン自動置換
-    // キーワード: trending_down, lightbulb, psychology -> Icon
+    // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
     // ========================================
     const iconMap = {
-        "trending_down": <TrendingDown className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
-        "lightbulb": <Lightbulb className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
-        "psychology": <Brain className="text-[#4ade80] mr-2 inline-block align-text-bottom" size={20} />,
+        "trending_down": <TrendingDown className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "lightbulb": <Lightbulb className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "psychology": <Brain className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "code": <Code className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "rocket_launch": <Rocket className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "flag": <Flag className="inline-block mr-2 text-[#4ade80]" size={20} />,
     };
 
     Object.entries(iconMap).forEach(([keyword, icon]) => {
