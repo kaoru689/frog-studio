@@ -98,7 +98,7 @@ function formatDate(dateString: string) {
 // 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
 function generateTOC(content: string) {
     // <h2 id="...">...</h2> の形式を想定 (改行対応)
-    const headingRegex = /<h([23])(?:[^>]*id="([^"]*)")?[^>]*>([\s\S]*?)<\/h[23]>/gi;
+    const headingRegex = /<h([23])[^>]+id="([^"]+)"[^>]*>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
@@ -301,7 +301,7 @@ export default async function BlogDetailPage({
                    基本スタイル (AI Visibility等、標準記事用)
                    ========================================= */
                 article .blog-content h2 {
-                    font-size: 1.875rem !important; /* text-3xl Standard Luxury */
+                    font-size: 1.875rem !important; /* text-3xl Standard Luxury Fixed */
                     line-height: 1.4 !important;
                     font-weight: 700 !important;
                     color: #fff !important; /* 標準は白、アクセントで緑 */
@@ -337,7 +337,7 @@ export default async function BlogDetailPage({
                    爆速サイト (hc9vbcn3ue) 専用オーバーライド
                    ========================================= */
                 article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
-                    font-size: 2.25rem !important; /* text-4xl Strong */
+                    font-size: 2.25rem !important; /* text-4xl Strong Impact */
                     font-weight: 800 !important;
                     color: #4ade80 !important;
                     margin-top: 4rem !important;
