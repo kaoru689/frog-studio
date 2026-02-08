@@ -1,5 +1,6 @@
 
-import type { Metadata } from "next";
+"use client";
+
 import Link from "next/link";
 import { Playfair_Display, Noto_Serif_JP, Lato, Noto_Sans_JP } from "next/font/google";
 
@@ -8,16 +9,6 @@ const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "600", "
 const notoSerifJP = Noto_Serif_JP({ subsets: ["latin"], weight: ["300", "400", "600"], variable: "--font-noto-serif" });
 const lato = Lato({ subsets: ["latin"], weight: ["300", "400", "700"], variable: "--font-lato" });
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["300", "400", "500", "700"], variable: "--font-noto-sans" });
-
-export const metadata: Metadata = {
-    title: "Grand Celestial Weddings - Royal Blue Variant | FROG Studio Works",
-    description: "永遠を誓う、ロイヤルブルーの聖域。FROG Studio制作実績：高級結婚式場「Grand Celestial Weddings」のランディングページ。",
-    openGraph: {
-        title: "Grand Celestial Weddings | FROG Studio Portfolio",
-        description: "Royal Blue & Gold Luxury Wedding Venue LP.",
-        images: ["https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=1920"],
-    },
-};
 
 export default function GrandCelestialPage() {
     return (
