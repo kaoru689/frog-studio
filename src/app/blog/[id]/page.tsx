@@ -233,7 +233,7 @@ function transformContent(content: string): string {
     // アイコン自動置換
     // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
     // ========================================
-    const iconMap = {
+    const iconMap: { [key: string]: string } = {
         "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#4ade80]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
         "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#4ade80]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
         "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
@@ -243,10 +243,13 @@ function transformContent(content: string): string {
         "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert inline-block mr-2 text-[#4ade80]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
     };
 
-    Object.entries(iconMap).forEach(([keyword, svgString]) => {
-        // キーワードの前後にスペースがあるか、行頭・行末、またはタグ境界、句読点の場合に置換
-        // 属性値（="code"）などは回避する
-        transformed = transformed.replace(new RegExp(`(^|\\s|>|[^="a-zA-Z0-9_])(${keyword})($|\\s|<|[^="a-zA-Z0-9_])`, 'g'), `$1${svgString}$3`);
+    // 一括置換用Regex
+    // Lookbehind (?<!) を使用して、<, </, =, - が直前にない場合のみマッチさせる
+    // これにより HTMLタグや属性値（class="lucide-code"）への誤爆を防ぐ
+    const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'g');
+
+    transformed = transformed.replace(pattern, (match) => {
+        return iconMap[match] || match;
     });
 
     return transformed;
@@ -287,9 +290,9 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                 }
                 .blog-content h2 {
-                    font-size: 1.5rem;
+                    font-size: 1.875rem;
                     font-weight: 700;
-                    color: #fff;
+                    color: #4ade80;
                     margin-top: 2.5rem;
                     margin-bottom: 1rem;
                     padding-bottom: 0.75rem;
@@ -304,7 +307,7 @@ export default async function BlogDetailPage({
                 }
                 .blog-content h3 {
                     font-size: 1.25rem;
-                    font-weight: 600;
+                    font-weight: 700;
                     color: #fff;
                     margin-top: 2rem;
                     margin-bottom: 0.75rem;
