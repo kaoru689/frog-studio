@@ -75,6 +75,31 @@ export default {
                     "50%": { opacity: "0.4", transform: "translateY(-2px) scale(1.02)" },
                 },
             },
+            typography: ({ theme }: any) => ({
+                invert: {
+                    css: {
+                        blockquote: {
+                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                            borderLeftColor: '#ef4444',
+                            borderLeftWidth: '4px',
+                            borderTopRightRadius: '0.5rem',
+                            borderBottomRightRadius: '0.5rem',
+                            padding: '1rem',
+                            fontStyle: 'normal',
+                            quotes: 'none',
+                            '&::before': {
+                                content: 'none',
+                            },
+                            'p:first-of-type::before': {
+                                content: 'none',
+                            },
+                            'p:last-of-type::after': {
+                                content: 'none',
+                            },
+                        },
+                    },
+                },
+            }),
         },
     },
     plugins: [require('@tailwindcss/typography')],
