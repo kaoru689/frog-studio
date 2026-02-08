@@ -84,7 +84,35 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
             <style>{`
                 .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
-                /* 爆速記事 (hc9vbcn3ue) への超巨大スタイリング（Specificityを最大化） */
+                /* =========================================
+                   GLOBAL HEADERS (Balanced)
+                   ========================================= */
+                /* 全記事共通: 程よいサイズ感 (text-3xl相当) */
+                article .blog-content h2 { 
+                    font-size: 1.875rem !important; /* text-3xl */
+                    line-height: 1.4 !important;
+                    font-weight: 800 !important; 
+                    color: #fff !important; 
+                    margin-top: 4rem !important; 
+                    margin-bottom: 2rem !important; 
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; 
+                    display: flex !important; 
+                    align-items: center !important; 
+                    gap: 0.75rem !important; 
+                    text-transform: none !important;
+                    letter-spacing: normal !important;
+                }
+                article .blog-content h2::before { 
+                    content: "●"; 
+                    color: #0df259; 
+                    font-size: 0.6em; 
+                    margin-right: 0.25rem; 
+                }
+
+                /* =========================================
+                   SPECIFIC OVERRIDE: Explosive Speed (hc9vbcn3ue)
+                   爆速記事のみ特別に巨大化
+                   ========================================= */
                 body article[data-post-id="hc9vbcn3ue"] .blog-content h2 { 
                     font-size: 3.5rem !important; 
                     font-weight: 900 !important; 
@@ -95,9 +123,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                     margin-bottom: 2.5rem !important;
                     letter-spacing: -0.02em !important;
                 }
-                /* 通常のH2 */
-                article .blog-content h2 { font-size: 2.2rem !important; line-height: 1.3 !important; font-weight: 800 !important; color: #fff !important; margin-top: 4rem !important; margin-bottom: 2rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; }
-                article .blog-content h2::before { content: "▎"; color: #0df259; font-size: 0.8em; margin-right: 0.25rem; }
+                body article[data-post-id="hc9vbcn3ue"] .blog-content h2::before {
+                    content: "▎"; 
+                    color: #0df259;
+                    font-size: 0.8em;
+                }
                 article .blog-content h3 { font-size: 1.6rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; margin-bottom: 1.5rem !important; border-left: 5px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
                 .blog-content strong { color: #0df259; font-weight: 700; }
             `}</style>
