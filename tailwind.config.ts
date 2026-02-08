@@ -79,16 +79,14 @@ export default {
                 invert: {
                     css: {
                         blockquote: {
-                            borderLeftColor: theme('colors.red.500'),
-                            backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                            color: theme('colors.gray.100'),
                             fontStyle: 'normal',
-                            paddingLeft: theme('spacing.4'),
-                            paddingRight: theme('spacing.4'),
-                            paddingTop: theme('spacing.2'),
-                            paddingBottom: theme('spacing.2'),
-                            borderRadius: theme('borderRadius.sm'),
-                            quotes: '"\\200C""\\200C"',
+                            borderLeftWidth: '4px',
+                            borderLeftColor: '#ef4444',
+                            backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                            borderRadius: theme('borderRadius.lg'),
+                            padding: '1.5rem',
+                            color: theme('colors.gray.100'),
+                            quotes: 'none',
                         },
                         'blockquote p:first-of-type::before': {
                             content: 'none',
@@ -96,10 +94,32 @@ export default {
                         'blockquote p:last-of-type::after': {
                             content: 'none',
                         },
-                        'ul > li::marker': {
-                            color: theme('colors.green.400'),
-                            fontWeight: 'bold',
+                        // Premium Unordered List
+                        'ul': {
+                            listStyleType: 'none',
+                            padding: '1.5rem',
+                            border: '1px solid rgba(74, 222, 128, 0.2)',
+                            borderRadius: theme('borderRadius.lg'),
+                            backgroundColor: 'rgba(74, 222, 128, 0.02)',
                         },
+                        'ul > li': {
+                            position: 'relative',
+                            paddingLeft: '1.75rem',
+                            marginTop: '0.5rem',
+                            marginBottom: '0.5rem',
+                        },
+                        'ul > li::before': {
+                            content: '""',
+                            position: 'absolute',
+                            left: '0',
+                            top: '0.375rem', // Adjust for line-height
+                            width: '1.25em',
+                            height: '1.25em',
+                            backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%234ade80'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9.135-9.135' /%3E%3C/svg%3E")`,
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: 'contain',
+                        },
+                        // Keep Ordered List simple but colored
                         'ol > li::marker': {
                             color: theme('colors.green.400'),
                             fontWeight: 'bold',
