@@ -244,9 +244,9 @@ function transformContent(content: string): string {
     };
 
     Object.entries(iconMap).forEach(([keyword, svgString]) => {
-        // キーワードの前後にスペースがあるか、行頭・行末の場合のみ置換
-        // HTMLタグの中身（属性値など）を誤爆しないように簡易的な対策
-        transformed = transformed.replace(new RegExp(`(^|\\s|>)(${keyword})(\\s|<|$)`, 'g'), `$1${svgString}$3`);
+        // キーワードの前後にスペースがあるか、行頭・行末、またはタグ境界、句読点の場合に置換
+        // 属性値（="code"）などは回避する
+        transformed = transformed.replace(new RegExp(`(^|\\s|>|[^="a-zA-Z0-9_])(${keyword})($|\\s|<|[^="a-zA-Z0-9_])`, 'g'), `$1${svgString}$3`);
     });
 
     return transformed;
