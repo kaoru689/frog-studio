@@ -231,14 +231,14 @@ export default async function BlogDetailPage({
 
     // AI Visibility記事の画像上書きロジック
     const normalizeTitle = (blog.title || "").normalize("NFKC");
+    // "AI"が含まれていれば対象（条件緩和）
     const isAiVisibility =
-        id.toLowerCase().includes("ai-visibility") || // ID変数を直接使用
-        blog.id?.includes("ai-visibility") ||
-        normalizeTitle.includes("AI Visibility") ||
-        (normalizeTitle.includes("AI") && normalizeTitle.includes("Visibility"));
+        id.toLowerCase().includes("ai") ||
+        blog.id?.includes("ai") ||
+        normalizeTitle.includes("AI");
 
     const displayThumbnail = isAiVisibility ? {
-        url: "/images/dailyfit/ai-visibility-thumb.png",
+        url: "/images/dailyfit/ai-visibility-thumb.jpg",
         width: 1200,
         height: 630,
     } : blog.thumbnail;
