@@ -238,7 +238,7 @@ export default async function BlogDetailPage({
         (normalizeTitle.includes("AI") && normalizeTitle.includes("Visibility"));
 
     const displayThumbnail = isAiVisibility ? {
-        url: "/images/cyber_ai_visibility_thumb.png?v=fixed",
+        url: "/images/ai-visibility-thumb.png",
         width: 1200,
         height: 630,
     } : blog.thumbnail;
