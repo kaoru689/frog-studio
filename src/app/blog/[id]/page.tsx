@@ -295,23 +295,23 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                 }
                 .blog-content h2 {
-                    font-size: 2.25rem; /* text-4xl */
-                    line-height: 1.3;
-                    font-weight: 900; /* font-black */
+                    font-size: 3rem !important; /* text-5xl */
+                    line-height: 1.2 !important;
+                    font-weight: 900 !important; /* font-black */
                     color: #4ade80;
-                    margin-top: 4rem; /* mt-16 */
-                    margin-bottom: 2rem; /* mb-8 */
+                    margin-top: 4rem !important; /* mt-16 */
+                    margin-bottom: 2rem !important; /* mb-8 */
                     padding-bottom: 1rem;
-                    border-bottom: 3px solid rgba(13, 242, 89, 0.4);
+                    border-bottom: 4px solid rgba(13, 242, 89, 0.6) !important;
                     display: flex;
                     align-items: center;
-                    gap: 0.75rem;
-                    text-transform: uppercase; /* Uppercase for English keywords */
-                    letter-spacing: 0.05em;
+                    gap: 1rem;
+                    text-transform: uppercase !important;
+                    letter-spacing: 0.1em !important;
                 }
                 .blog-content h2 svg {
-                    width: 1.2em;
-                    height: 1.2em;
+                    width: 1em;
+                    height: 1em;
                 }
                 .blog-content h2::before {
                     content: "▎";
@@ -320,14 +320,14 @@ export default async function BlogDetailPage({
                     margin-right: 0.25rem;
                 }
                 .blog-content h3 {
-                    font-size: 1.5rem; /* text-2xl */
-                    font-weight: 800;
+                    font-size: 1.875rem !important; /* text-3xl */
+                    font-weight: 900 !important;
                     color: #fff;
-                    margin-top: 3rem; /* mt-12 */
-                    margin-bottom: 1.5rem; /* mb-6 */
+                    margin-top: 3rem !important; /* mt-12 */
+                    margin-bottom: 1.5rem !important; /* mb-6 */
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.75rem;
                 }
                 .blog-content h3 svg {
                     width: 1.1em;
@@ -630,9 +630,9 @@ export default async function BlogDetailPage({
             <section className="px-6 pb-24">
                 <div className="max-w-6xl mx-auto">
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-                        {/* 目次（デスクトップ） */}
+                        {/* 目次（デスクトップ・モバイル強制表示） */}
                         {toc.length > 0 && (
-                            <aside className="hidden lg:block lg:col-span-1">
+                            <aside className="lg:col-span-1 block">
                                 <div className="sticky top-32 p-6 bg-slate-900/50 border border-white/10 rounded-xl backdrop-blur-sm">
                                     <h3 className="text-sm font-black text-cyber-primary mb-4 flex items-center gap-2 uppercase tracking-wider">
                                         <span className="material-symbols-outlined text-base">toc</span>
