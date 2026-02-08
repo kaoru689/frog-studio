@@ -203,8 +203,13 @@ function transformContent(content: string): string {
     // ========================================
     // テキスト置換（ユーザー指定）
     // ========================================
+    // 特定のフレーズ完全一致置換（最優先）
+    transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。");
+
+    // その他の表記ゆれ対応
     // "FROG Studioのチーフコンサルタント" または "チーフコンサルタント" -> "FROG Studio"
     transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
+
 
     return transformed;
 }
