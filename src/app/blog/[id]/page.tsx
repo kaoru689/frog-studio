@@ -37,13 +37,15 @@ function formatDate(dateString: string) {
     return date.toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
 }
 
+// 1. 【最強】日本語IDを確実に抽出する目次生成
 function generateTOC(content: string) {
-    const headingRegex = /<h([23]).*?id=["']([^"']*)["'].*?>([\s\S]*?)<\/h[23]>/gi;
+    // 属性の順番や改行を問わず、id属性を持つh2, h3を確実に抽出（[\s\S]で全文字対応）
+    const headingRegex = /<h([23])[\s\S]*?id=["']([^"']*)["'][\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
     while ((match = headingRegex.exec(content)) !== null) {
         const id = match[2];
-        const html = match[3].replace(/<[^>]*>/g, "");
+        const html = match[3].replace(/<[^>]*>/g, ""); // 目次内はクリーンなテキスト
         if (id && html) {
             toc.push({ level: parseInt(match[1]), html, id });
         }
@@ -51,15 +53,19 @@ function generateTOC(content: string) {
     return toc;
 }
 
+// 2. 【最強】日本語ID付与 ＆ アイコン全方位置換
 function transformContent(content: string): string {
     let transformed = content;
+
+    // A. ID付与 (日本語をそのままIDとして利用し、スペースのみ変換)
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
         if (attrs.includes('id=')) return match;
-        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/[^\w\-\u0080-\uFFFF]/g, "");
-        const finalId = id || `heading-${Math.floor(Math.random() * 10000)}`;
+        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/["']/g, "");
+        const finalId = id || `section-${Math.floor(Math.random() * 10000)}`;
         return `<h${level}${attrs} id="${finalId}">${text}</h${level}>`;
     });
 
+    // B. アイコン一元管理 (flagを追加しました！)
     const iconMap: { [key: string]: string } = {
         "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
         "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
@@ -70,6 +76,10 @@ function transformContent(content: string): string {
     };
     const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'gi');
     transformed = transformed.replace(pattern, (match) => iconMap[match.toLowerCase()] || match);
+
+    // C. ブランディング置換
+    transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。")
+        .replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
     return transformed;
 }
 
@@ -86,11 +96,23 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
             <style>{`
                 .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
-                article .blog-content h2 { font-size: 2rem !important; line-height: 1.3 !important; font-weight: 800 !important; color: #fff !important; margin-top: 4rem !important; margin-bottom: 2rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; }
-                article .blog-content h2::before { content: "●"; color: #0df259; font-size: 0.6em; margin-right: 0.25rem; }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2 { font-size: 2.8rem !important; font-weight: 900 !important; text-transform: uppercase !important; color: #4ade80 !important; border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; }
-                article .blog-content h3 { font-size: 1.5rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; border-left: 4px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
+                /* 爆速記事 (hc9vbcn3ue) への特権的巨大スタイリング */
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 { 
+                    font-size: 3.2rem !important; 
+                    font-weight: 900 !important; 
+                    text-transform: uppercase !important; 
+                    color: #4ade80 !important; 
+                    border-bottom: 4px solid rgba(13, 242, 89, 0.6) !important; 
+                    margin-top: 5rem !important;
+                    margin-bottom: 2.5rem !important;
+                }
+                /* 通常記事のH2 */
+                article .blog-content h2 { font-size: 2.2rem !important; line-height: 1.3 !important; font-weight: 800 !important; color: #fff !important; margin-top: 4rem !important; margin-bottom: 2rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; }
+                article .blog-content h2::before { content: "▎"; color: #0df259; font-size: 0.8em; margin-right: 0.25rem; }
+                /* H3共通 */
+                article .blog-content h3 { font-size: 1.6rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; margin-bottom: 1.5rem !important; border-left: 5px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
                 .blog-content strong { color: #0df259; font-weight: 700; }
+                .blog-content a { color: #0df259; text-decoration: underline; transition: all 0.2s; }
             `}</style>
 
             <section className="relative pt-32 pb-12 px-6">
