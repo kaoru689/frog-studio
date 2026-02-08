@@ -61,7 +61,7 @@ export default function GrandCelestialPage() {
             </header>
             <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-black">
                 <div className="absolute inset-0 z-0">
-                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTW4D8ECJZzX434GHz4Vq3FP_Sb7B0ZKVx8KN-NtiGPgUzOqqOE2MlgdaJ8sIz0qB9PwTQeS3fMLVw32xMmnnWy99RnWCOkvD4966GbgA_BXoejYo78iCHAQsW0JxCFM4dRjZoD_fU73t7ePzDv0ygiVgluXeO5AfscpoUfTCp5UjpN4vRnPJi25XrkCV8RHVxtYPKUZSC3WkzHKa9gNDF_CmoJOYvk8vg9FL4gzxXzUbGoeNK3Ct5uV6d7GYWQGaIDirVwrfedw" />
+                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="/images/grand-celestial/top-hero-new.jpg" />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a3b]/60 via-[#0a1a3b]/30 to-black/80 mix-blend-multiply"></div>
                 </div>
                 <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto mt-10">

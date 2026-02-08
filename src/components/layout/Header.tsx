@@ -46,8 +46,9 @@ export default function Header() {
 
     const pathname = usePathname();
     const isStellarPage = pathname?.startsWith("/works/stellar");
+    const isGrandCelestialPage = pathname?.startsWith("/works/grand-celestial");
 
-    if (isStellarPage) return null;
+    if (isStellarPage || isGrandCelestialPage) return null;
 
     return (
         <header className="fixed top-0 left-0 right-0 z-[9999] border-b border-primary/20 bg-background-dark/90 backdrop-blur-xl shadow-[0_1px_10px_rgba(13,242,89,0.2)]">
