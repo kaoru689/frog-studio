@@ -97,8 +97,8 @@ function formatDate(dateString: string) {
 // 目次生成（h2, h3を抽出）
 // 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
 function generateTOC(content: string) {
-    // <h2 id="...">...</h2> の形式を想定
-    const headingRegex = /<h([23])(?:[^>]*id="([^"]*)")?[^>]*>(.*?)<\/h[23]>/gi;
+    // <h2 id="...">...</h2> の形式を想定 (改行対応)
+    const headingRegex = /<h([23])(?:[^>]*id="([^"]*)")?[^>]*>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
@@ -120,9 +120,11 @@ function transformContent(content: string): string {
     let transformed = content;
 
     // 見出しにIDを付与（h2, h3）
-    transformed = transformed.replace(/<h([23])([^>]*)>(.*?)<\/h[23]>/gi, (match, level, attrs, text) => {
+    // 見出しにIDを付与（h2, h3） 改行対応
+    transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
         const cleanText = text.replace(/<[^>]*>/g, "");
         const id = cleanText.toLowerCase().replace(/\s+/g, "-").replace(/[^\w\-]/g, "");
+        // 既存のIDがある場合は上書きしない制御も可能だが、今回は強制的に付与して統一する
         return `<h${level}${attrs} id="${id}">${text}</h${level}>`;
     });
 
@@ -294,44 +296,45 @@ export default async function BlogDetailPage({
                     line-height: 2;
                     color: #d1d5db;
                 }
-                .blog-content h2 {
+                /* 強制適用：詳細度を上げるために article を付与 */
+                article .blog-content h2 {
                     font-size: 3rem !important; /* text-5xl */
                     line-height: 1.2 !important;
                     font-weight: 900 !important; /* font-black */
-                    color: #4ade80;
-                    margin-top: 4rem !important; /* mt-16 */
-                    margin-bottom: 2rem !important; /* mb-8 */
-                    padding-bottom: 1rem;
+                    color: #4ade80 !important;
+                    margin-top: 5rem !important; /* mt-20 */
+                    margin-bottom: 2.5rem !important; /* mb-10 */
+                    padding-bottom: 1rem !important;
                     border-bottom: 4px solid rgba(13, 242, 89, 0.6) !important;
-                    display: flex;
-                    align-items: center;
-                    gap: 1rem;
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 1rem !important;
                     text-transform: uppercase !important;
                     letter-spacing: 0.1em !important;
                 }
-                .blog-content h2 svg {
-                    width: 1em;
-                    height: 1em;
+                article .blog-content h2 svg {
+                    width: 1em !important;
+                    height: 1em !important;
                 }
-                .blog-content h2::before {
+                article .blog-content h2::before {
                     content: "▎";
                     color: #0df259;
                     font-size: 0.8em;
                     margin-right: 0.25rem;
                 }
-                .blog-content h3 {
+                article .blog-content h3 {
                     font-size: 1.875rem !important; /* text-3xl */
                     font-weight: 900 !important;
-                    color: #fff;
-                    margin-top: 3rem !important; /* mt-12 */
-                    margin-bottom: 1.5rem !important; /* mb-6 */
-                    display: flex;
-                    align-items: center;
-                    gap: 0.75rem;
+                    color: #fff !important;
+                    margin-top: 4rem !important; /* mt-16 */
+                    margin-bottom: 2rem !important; /* mb-8 */
+                    display: flex !important;
+                    align-items: center !important;
+                    gap: 0.75rem !important;
                 }
-                .blog-content h3 svg {
-                    width: 1.1em;
-                    height: 1.1em;
+                article .blog-content h3 svg {
+                    width: 1.1em !important;
+                    height: 1.1em !important;
                 }
                 .blog-content p {
                     margin-bottom: 1.5rem;
