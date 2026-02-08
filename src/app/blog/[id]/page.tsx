@@ -37,15 +37,13 @@ function formatDate(dateString: string) {
     return date.toLocaleDateString("ja-JP", { year: "numeric", month: "long", day: "numeric" });
 }
 
-// 1. 超柔軟な目次生成ロジック（日本語ID対応）
 function generateTOC(content: string) {
-    // 属性の順番や改行を問わず、id属性を持つh2, h3を確実に抽出
     const headingRegex = /<h([23]).*?id=["']([^"']*)["'].*?>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
     while ((match = headingRegex.exec(content)) !== null) {
         const id = match[2];
-        const html = match[3].replace(/<[^>]*>/g, ""); // 目次内はタグなしテキストにする
+        const html = match[3].replace(/<[^>]*>/g, "");
         if (id && html) {
             toc.push({ level: parseInt(match[1]), html, id });
         }
@@ -53,32 +51,25 @@ function generateTOC(content: string) {
     return toc;
 }
 
-// 2. 日本語対応ID付与 ＆ アイコン自動置換
 function transformContent(content: string): string {
     let transformed = content;
-
-    // A. ID付与 (日本語を削除せず、スペースをハイフンに換えるだけ)
     transformed = transformed.replace(/<h([23])([^>]*)>([\s\S]*?)<\/h[23]>/gi, (match, level, attrs, text) => {
         if (attrs.includes('id=')) return match;
-        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/["']/g, "");
+        const id = text.replace(/<[^>]*>/g, "").trim().replace(/\s+/g, "-").replace(/[^\w\-\u0080-\uFFFF]/g, "");
         const finalId = id || `heading-${Math.floor(Math.random() * 10000)}`;
         return `<h${level}${attrs} id="${finalId}">${text}</h${level}>`;
     });
 
-    // B. アイコン一元管理 ＆ 置換
     const iconMap: { [key: string]: string } = {
         "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#3b82f6]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
         "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#eab308]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
-        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path></svg>',
+        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path></svg>',
         "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#f97316]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>',
+        "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
         "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide inline-block mr-2 text-[#ef4444]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
     };
-    const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'g');
-    transformed = transformed.replace(pattern, (match) => iconMap[match] || match);
-
-    // C. ブランディング置換
-    transformed = transformed.replace(/こんにちは、FROG Studioのチーフコンサルタントです。/g, "こんにちは、FROG Studioです。")
-        .replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
+    const pattern = new RegExp(`(?<![</="\\'-])(${Object.keys(iconMap).join('|')})`, 'gi');
+    transformed = transformed.replace(pattern, (match) => iconMap[match.toLowerCase()] || match);
     return transformed;
 }
 
@@ -91,18 +82,15 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
     const toc = generateTOC(contentWithEnhancements);
 
     return (
-        <div className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white selection:bg-cyber-primary selection:text-black min-h-screen`}>
+        <div className={`${spaceGrotesk.variable} ${notoSansJP.variable} font-body bg-[#020617] text-white min-h-screen`}>
             <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
             <style>{`
                 .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
                 article .blog-content h2 { font-size: 2rem !important; line-height: 1.3 !important; font-weight: 800 !important; color: #fff !important; margin-top: 4rem !important; margin-bottom: 2rem !important; display: flex !important; align-items: center !important; gap: 0.75rem !important; border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; }
                 article .blog-content h2::before { content: "●"; color: #0df259; font-size: 0.6em; margin-right: 0.25rem; }
-                article[data-post-id="hc9vbcn3ue"] .blog-content h2 { font-size: 2.5rem !important; font-weight: 900 !important; text-transform: uppercase !important; color: #4ade80 !important; border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; }
-                article .blog-content h3 { font-size: 1.4rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 2.5rem !important; margin-bottom: 1.25rem !important; border-left: 4px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
-                .blog-content p { margin-bottom: 1.75rem; }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 { font-size: 2.8rem !important; font-weight: 900 !important; text-transform: uppercase !important; color: #4ade80 !important; border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important; }
+                article .blog-content h3 { font-size: 1.5rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; border-left: 4px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
                 .blog-content strong { color: #0df259; font-weight: 700; }
-                .blog-content a { color: #0df259; text-decoration: underline; transition: all 0.2s; }
-                .blog-content a:hover { color: #fff; background: rgba(13, 242, 89, 0.1); }
             `}</style>
 
             <section className="relative pt-32 pb-12 px-6">
@@ -117,6 +105,16 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                     </div>
                 </div>
             </section>
+
+            {blog.thumbnail && (
+                <section className="px-6 pb-12">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_30px_rgba(13,242,89,0.1)]">
+                            <Image src={blog.thumbnail.url} alt={blog.title} fill className="object-cover" priority />
+                        </div>
+                    </div>
+                </section>
+            )}
 
             <section className="px-6 pb-24">
                 <div className="max-w-6xl mx-auto">
@@ -136,6 +134,26 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                         <article data-post-id={id} className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
                             <div className="blog-content prose prose-invert prose-green max-w-none" dangerouslySetInnerHTML={{ __html: contentWithEnhancements }} />
                         </article>
+                    </div>
+                </div>
+            </section>
+
+            <section className="py-16 px-6 bg-gradient-to-b from-slate-900/50 to-transparent border-t border-white/5">
+                <div className="max-w-5xl mx-auto text-center mb-12">
+                    <span className="text-cyber-primary font-mono text-sm tracking-[0.3em] uppercase mb-2 block">PRICING_PLAN.SYS</span>
+                    <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">高品質なWebサイトを制作しませんか？</h2>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {PLANS.map((plan) => (
+                            <div key={plan.name} className={`relative bg-slate-900/80 border rounded-xl p-6 transition-all ${plan.popular ? "border-amber-400/50 ring-2 ring-amber-400/20" : "border-white/10"}`}>
+                                <div className={`text-${plan.color} font-mono text-sm font-bold mb-1`}>{plan.name}</div>
+                                <div className="text-white font-bold mb-4">{plan.catchphrase}</div>
+                                <div className="text-3xl font-black text-white mb-4">¥{plan.price}<span className="text-gray-500 text-sm">〜</span></div>
+                                <ul className="space-y-2 mb-6 text-left">
+                                    {plan.features.map((f) => (<li key={f} className="flex items-center gap-2 text-sm text-gray-400"><span className={`material-symbols-outlined text-base text-${plan.color}`}>check_circle</span>{f}</li>))}
+                                </ul>
+                                <Link href="/#contact" className={`block w-full py-3 text-center font-bold rounded ${plan.popular ? "bg-gradient-to-r from-amber-400 to-orange-500 text-black" : "bg-cyber-primary/10 text-cyber-primary border border-cyber-primary/30"}`}>このプランで相談</Link>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
