@@ -211,6 +211,17 @@ function transformContent(content: string): string {
     transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
 
 
+    // ========================================
+    // テーブル（表）をスマホ対応（横スクロール）
+    // ========================================
+    transformed = transformed.replace(
+        /<table/gi,
+        '<div class="table-wrapper"><table'
+    ).replace(
+        /<\/table>/gi,
+        '</table></div>'
+    );
+
     return transformed;
 }
 

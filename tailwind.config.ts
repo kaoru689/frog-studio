@@ -109,15 +109,46 @@ export default {
                             marginBottom: '0.5rem',
                         },
                         'ul > li::before': {
-                            content: '""',
-                            position: 'absolute',
-                            left: '0',
-                            top: '0.375rem', // Adjust for line-height
-                            width: '1.25em',
-                            height: '1.25em',
-                            backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='%234ade80'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9.135-9.135' /%3E%3C/svg%3E")`,
-                            backgroundRepeat: 'no-repeat',
                             backgroundSize: 'contain',
+                        },
+                        // Table Styling (Pricing Card Look)
+                        'table': {
+                            width: '100%',
+                            borderCollapse: 'separate',
+                            borderSpacing: '0',
+                            marginTop: '2em',
+                            marginBottom: '2em',
+                            border: '1px solid rgba(74, 222, 128, 0.2)', // 薄いグリーン枠
+                            borderRadius: theme('borderRadius.lg'),
+                            overflow: 'hidden',
+                        },
+                        'thead': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                            color: '#4ade80', // FSグリーン
+                            borderBottom: '2px solid rgba(74, 222, 128, 0.2)',
+                        },
+                        'thead th': {
+                            color: '#4ade80',
+                            fontWeight: '700',
+                            padding: '1rem',
+                            textAlign: 'left',
+                            fontSize: '0.95rem',
+                            letterSpacing: '0.05em',
+                        },
+                        'tbody tr': {
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
+                        },
+                        'tbody tr:last-child': {
+                            borderBottom: 'none',
+                        },
+                        'tbody td': {
+                            padding: '1rem',
+                            verticalAlign: 'middle',
+                            color: theme('colors.gray.300'),
+                            fontSize: '0.9rem',
+                        },
+                        'tbody tr:nth-child(even)': {
+                            backgroundColor: 'rgba(255, 255, 255, 0.01)',
                         },
                         // Keep Ordered List simple but colored
                         'ol > li::marker': {
