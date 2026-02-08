@@ -82,16 +82,16 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
             <style>{`
                 .blog-content { font-size: 1.05rem; line-height: 2; color: #d1d5db; }
                 /* =========================================
-                   GLOBAL HEADERS (Balanced & Luxury)
+                   GLOBAL HEADERS (Refined Balance)
                    ========================================= */
-                /* 全記事共通: 2.4rem (text-4xl相当) で高級感を出しつつバランス調整 */
+                /* 全記事共通: 2.0rem (text-3.5xl相当) に調整 */
                 article .blog-content h2 { 
-                    font-size: 2.4rem !important; /* text-4xl */
-                    line-height: 1.3 !important;
+                    font-size: 2.0rem !important; 
+                    line-height: 1.4 !important;
                     font-weight: 800 !important; 
                     color: #fff !important; 
-                    margin-top: 4.5rem !important; 
-                    margin-bottom: 2.25rem !important; 
+                    margin-top: 4rem !important; 
+                    margin-bottom: 2rem !important; 
                     border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important; 
                     display: flex !important; 
                     align-items: center !important; 
@@ -125,7 +125,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ id:
                     color: #0df259;
                     font-size: 0.8em;
                 }
-                article .blog-content h3 { font-size: 1.6rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 3rem !important; margin-bottom: 1.5rem !important; border-left: 5px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
+                article .blog-content h3 { font-size: 1.4rem !important; font-weight: 700 !important; color: #e5e7eb !important; margin-top: 2.5rem !important; margin-bottom: 1.25rem !important; border-left: 4px solid #0df259; padding-left: 1rem !important; display: flex !important; align-items: center !important; }
                 .blog-content strong { color: #0df259; font-weight: 700; }
                 .blog-content a { color: #0df259; text-decoration: underline; transition: all 0.2s; }
             `}</style>
