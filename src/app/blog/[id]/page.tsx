@@ -19,8 +19,8 @@ const notoSansJP = Noto_Sans_JP({
     display: "swap",
 });
 
-// ISR設定
-export const revalidate = 60;
+// ISR設定 (現在デバッグのため0)
+export const revalidate = 0;
 
 // プラン情報（Pricing.tsxと同期）
 const PLANS = [
@@ -232,12 +232,13 @@ export default async function BlogDetailPage({
     // AI Visibility記事の画像上書きロジック
     const normalizeTitle = (blog.title || "").normalize("NFKC");
     const isAiVisibility =
+        id.toLowerCase().includes("ai-visibility") || // ID変数を直接使用
         blog.id?.includes("ai-visibility") ||
         normalizeTitle.includes("AI Visibility") ||
         (normalizeTitle.includes("AI") && normalizeTitle.includes("Visibility"));
 
     const displayThumbnail = isAiVisibility ? {
-        url: "/images/cyber_ai_visibility_thumb.png",
+        url: "/images/cyber_ai_visibility_thumb.png?v=fixed",
         width: 1200,
         height: 630,
     } : blog.thumbnail;
