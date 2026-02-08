@@ -97,8 +97,9 @@ function formatDate(dateString: string) {
 // 目次生成（h2, h3を抽出）
 // 目次生成（h2, h3を抽出） transformedContentから生成するのでIDも取得可能
 function generateTOC(content: string) {
-    // <h2 id="...">...</h2> の形式を想定 (改行対応) - 柔軟な正規表現に変更
-    const headingRegex = /<h([23])(?:[^>]*?)id="([^"]+)"(?:[^>]*)>([\s\S]*?)<\/h[23]>/gi;
+    // ユーザー指定の超柔軟正規表現: ID属性の位置や改行に左右されない
+    // /<h([23])[\s\S]*?id="([^"]+)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi
+    const headingRegex = /<h([23])[\s\S]*?id="([^"]+)"[\s\S]*?>([\s\S]*?)<\/h[23]>/gi;
     const toc: { level: number; html: string; id: string }[] = [];
     let match;
 
@@ -339,7 +340,7 @@ export default async function BlogDetailPage({
                    ========================================= */
                 article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
                     font-size: 2.25rem !important; /* text-4xl Strong Impact */
-                    font-weight: 900 !important; /* Black */
+                    font-weight: 900 !important; /* font-black */
                     color: #4ade80 !important;
                     margin-top: 4rem !important;
                     margin-bottom: 2rem !important;
