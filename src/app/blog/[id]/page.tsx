@@ -203,10 +203,8 @@ function transformContent(content: string): string {
     // ========================================
     // テキスト置換（ユーザー指定）
     // ========================================
-    // "FROG Studioのチーフコンサルタント" -> "FROG Studio"
-    transformed = transformed.replace(/FROG Studioのチーフコンサルタント/g, "FROG Studio");
-    // 単体の "チーフコンサルタント" -> "FROG Studio"（念のため）
-    transformed = transformed.replace(/チーフコンサルタント/g, "FROG Studio");
+    // "FROG Studioのチーフコンサルタント" または "チーフコンサルタント" -> "FROG Studio"
+    transformed = transformed.replace(/(FROG\s*Studio\s*の\s*)?チーフコンサルタント/gi, "FROG Studio");
 
     return transformed;
 }
@@ -225,6 +223,19 @@ export default async function BlogDetailPage({
 
     const toc = generateTOC(blog.content);
     const contentWithEnhancements = transformContent(blog.content);
+
+    // AI Visibility記事の画像上書きロジック
+    const normalizeTitle = (blog.title || "").normalize("NFKC");
+    const isAiVisibility =
+        blog.id?.includes("ai-visibility") ||
+        normalizeTitle.includes("AI Visibility") ||
+        (normalizeTitle.includes("AI") && normalizeTitle.includes("Visibility"));
+
+    const displayThumbnail = isAiVisibility ? {
+        url: "/images/cyber_ai_speed.png",
+        width: 1200,
+        height: 630,
+    } : blog.thumbnail;
 
     return (
         <div
@@ -543,12 +554,12 @@ export default async function BlogDetailPage({
             </section>
 
             {/* サムネイル */}
-            {blog.thumbnail && (
+            {displayThumbnail && (
                 <section className="px-6 pb-12">
                     <div className="max-w-4xl mx-auto">
-                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10">
+                        <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-[0_0_30px_rgba(13,242,89,0.1)]">
                             <Image
-                                src={blog.thumbnail.url}
+                                src={displayThumbnail.url}
                                 alt={blog.title}
                                 fill
                                 className="object-cover"
@@ -589,35 +600,7 @@ export default async function BlogDetailPage({
 
                         {/* 本文 */}
                         <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
-                            {/* AI Visibility記事専用の特別画像 */}
-                            {(function () {
-                                const title = (blog.title || "").normalize("NFKC");
-                                const isTarget =
-                                    blog.id.includes("ai-visibility") || // IDで判定（確実）
-                                    title.includes("AI Visibility") ||
-                                    (title.includes("AI") && title.includes("Visibility"));
 
-                                if (!isTarget) return null;
-
-                                return (
-                                    <div className="mb-12 rounded-xl overflow-hidden border border-cyber-primary/30 shadow-[0_0_30px_rgba(13,242,89,0.2)] group relative">
-                                        <div className="absolute inset-0 bg-cyber-primary/10 mix-blend-overlay group-hover:bg-cyber-primary/0 transition-all duration-500 pointer-events-none"></div>
-                                        <Image
-                                            src="/images/cyber_ai_speed.png"
-                                            alt="AI Visibility - Speed & Intelligence"
-                                            width={1200}
-                                            height={675}
-                                            className="w-full object-cover transform hover:scale-105 transition-transform duration-700"
-                                            priority
-                                        />
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 pointer-events-none">
-                                            <p className="text-cyber-primary font-mono text-sm tracking-wider">
-                                                AI_VISIBILITY_PROTOCOL // INITIATED
-                                            </p>
-                                        </div>
-                                    </div>
-                                );
-                            })()}
                             <div
                                 className="blog-content prose prose-invert prose-green max-w-none"
                                 dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
