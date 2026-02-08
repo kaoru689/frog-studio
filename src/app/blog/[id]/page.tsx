@@ -295,27 +295,43 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                 }
                 .blog-content h2 {
-                    font-size: 1.875rem; /* text-3xl approx */
-                    font-weight: 700;
+                    font-size: 2.25rem; /* text-4xl */
+                    line-height: 1.3;
+                    font-weight: 900; /* font-black */
                     color: #4ade80;
-                    margin-top: 2.5rem; /* mt-10 */
-                    margin-bottom: 1.5rem; /* mb-6 */
-                    padding-bottom: 0.75rem;
-                    border-bottom: 2px solid rgba(13, 242, 89, 0.4);
+                    margin-top: 4rem; /* mt-16 */
+                    margin-bottom: 2rem; /* mb-8 */
+                    padding-bottom: 1rem;
+                    border-bottom: 3px solid rgba(13, 242, 89, 0.4);
                     display: flex;
                     align-items: center;
-                    gap: 0.5rem;
+                    gap: 0.75rem;
+                    text-transform: uppercase; /* Uppercase for English keywords */
+                    letter-spacing: 0.05em;
+                }
+                .blog-content h2 svg {
+                    width: 1.2em;
+                    height: 1.2em;
                 }
                 .blog-content h2::before {
                     content: "▎";
                     color: #0df259;
+                    font-size: 0.8em;
+                    margin-right: 0.25rem;
                 }
                 .blog-content h3 {
-                    font-size: 1.25rem; /* text-xl */
-                    font-weight: 700;
+                    font-size: 1.5rem; /* text-2xl */
+                    font-weight: 800;
                     color: #fff;
-                    margin-top: 2.5rem; /* mt-10 */
+                    margin-top: 3rem; /* mt-12 */
                     margin-bottom: 1.5rem; /* mb-6 */
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+                .blog-content h3 svg {
+                    width: 1.1em;
+                    height: 1.1em;
                 }
                 .blog-content p {
                     margin-bottom: 1.5rem;
@@ -617,17 +633,17 @@ export default async function BlogDetailPage({
                         {/* 目次（デスクトップ） */}
                         {toc.length > 0 && (
                             <aside className="hidden lg:block lg:col-span-1">
-                                <div className="sticky top-24 p-6 bg-cyber-surfaceLight/20 border border-white/5 rounded-lg">
-                                    <h3 className="text-sm font-bold text-cyber-primary mb-4 flex items-center gap-2">
-                                        <span className="material-symbols-outlined text-base">list</span>
-                                        目次
+                                <div className="sticky top-32 p-6 bg-slate-900/50 border border-white/10 rounded-xl backdrop-blur-sm">
+                                    <h3 className="text-sm font-black text-cyber-primary mb-4 flex items-center gap-2 uppercase tracking-wider">
+                                        <span className="material-symbols-outlined text-base">toc</span>
+                                        Table of Contents
                                     </h3>
-                                    <nav className="space-y-2">
+                                    <nav className="space-y-3">
                                         {toc.map((item, index) => (
                                             <a
                                                 key={index}
                                                 href={`#${item.id}`}
-                                                className={`block text-sm text-gray-400 hover:text-cyber-primary transition-colors ${item.level === 3 ? "pl-4" : ""
+                                                className={`block text-sm text-gray-400 hover:text-cyber-primary hover:bg-white/5 p-1 rounded transition-all leading-6 ${item.level === 3 ? "pl-4 text-xs" : "font-bold"
                                                     }`}
                                                 dangerouslySetInnerHTML={{ __html: item.html }}
                                             />
