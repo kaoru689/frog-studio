@@ -40,29 +40,14 @@ export default function BlogListPage() {
 
     useEffect(() => {
         async function fetchBlogs() {
-            // 静的記事データ（常に先頭に表示）
-            const staticBlog: Blog = {
-                id: "ai-visibility-2026",
-                title: "2026年、従来のSEOだけでは生き残れない ——「AI Visibility」という新常識",
-                description: "Google SGE、ChatGPT...AIが検索の主役になる時代、あなたのサイトは「引用される側」ですか？",
-                category: ["SEO戦略", "2026年最新"],
-                publishedAt: "2026-02-05T00:00:00.000Z",
-            };
-
             try {
                 const res = await fetch("/api/blogs");
                 if (res.ok) {
                     const data = await res.json();
-                    // 静的記事を先頭にマージ
-                    setBlogs([staticBlog, ...data]);
-                } else {
-                    // API失敗時も静的記事は表示
-                    setBlogs([staticBlog]);
+                    setBlogs(data);
                 }
             } catch (error) {
                 console.error("Failed to fetch blogs:", error);
-                // エラー時も静的記事は表示
-                setBlogs([staticBlog]);
             } finally {
                 setIsLoading(false);
             }
