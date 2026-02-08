@@ -582,7 +582,7 @@ export default async function BlogDetailPage({
                         {/* 本文 */}
                         <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
                             <div
-                                className="blog-content"
+                                className="blog-content prose prose-invert prose-green max-w-none"
                                 dangerouslySetInnerHTML={{ __html: contentWithEnhancements }}
                             />
                         </article>
