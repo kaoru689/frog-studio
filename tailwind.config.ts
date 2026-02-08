@@ -79,23 +79,30 @@ export default {
                 invert: {
                     css: {
                         blockquote: {
+                            borderLeftColor: theme('colors.red.500'),
                             backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                            borderLeftColor: '#ef4444',
-                            borderLeftWidth: '4px',
-                            borderTopRightRadius: '0.5rem',
-                            borderBottomRightRadius: '0.5rem',
-                            padding: '1rem',
+                            color: theme('colors.gray.100'),
                             fontStyle: 'normal',
-                            quotes: 'none',
-                            '&::before': {
-                                content: 'none',
-                            },
-                            'p:first-of-type::before': {
-                                content: 'none',
-                            },
-                            'p:last-of-type::after': {
-                                content: 'none',
-                            },
+                            paddingLeft: theme('spacing.4'),
+                            paddingRight: theme('spacing.4'),
+                            paddingTop: theme('spacing.2'),
+                            paddingBottom: theme('spacing.2'),
+                            borderRadius: theme('borderRadius.sm'),
+                            quotes: '"\\200C""\\200C"',
+                        },
+                        'blockquote p:first-of-type::before': {
+                            content: 'none',
+                        },
+                        'blockquote p:last-of-type::after': {
+                            content: 'none',
+                        },
+                        'ul > li::marker': {
+                            color: theme('colors.green.400'),
+                            fontWeight: 'bold',
+                        },
+                        'ol > li::marker': {
+                            color: theme('colors.green.400'),
+                            fontWeight: 'bold',
                         },
                     },
                 },
