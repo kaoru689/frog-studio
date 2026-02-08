@@ -305,17 +305,10 @@ export default function RootLayout({
                 {/* Preconnect for Google Fonts */}
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                {/* Material Symbols - preload + async load to prevent render blocking */}
-                <link
-                    rel="preload"
-                    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0&display=swap"
-                    as="style"
-                />
+                {/* Material Symbols - simple stylesheet (no onLoad for Server Component compatibility) */}
                 <link
                     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@24,400,0&display=swap"
                     rel="stylesheet"
-                    media="print"
-                    onLoad={(e) => { (e.target as HTMLLinkElement).media = 'all'; }}
                 />
             </head>
             <body className="font-sans antialiased bg-slate-50 dark:bg-dark-bg text-slate-900 dark:text-slate-100">
