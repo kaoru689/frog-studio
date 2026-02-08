@@ -297,41 +297,73 @@ export default async function BlogDetailPage({
                     color: #d1d5db;
                 }
                 /* 強制適用：詳細度を上げるために article を付与 */
+                /* =========================================
+                   基本スタイル (AI Visibility等、標準記事用)
+                   ========================================= */
                 article .blog-content h2 {
-                    font-size: 2.5rem !important; /* text-4xl Balanced Luxury */
-                    line-height: 1.3 !important;
-                    font-weight: 800 !important; /* ExtraBold */
-                    color: #4ade80 !important;
-                    margin-top: 4rem !important; /* mt-16 */
-                    margin-bottom: 2rem !important; /* mb-8 */
-                    padding-bottom: 0.75rem !important;
-                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
-                    display: flex !important;
-                    align-items: center !important;
-                    gap: 0.75rem !important;
-                    text-transform: uppercase !important;
-                    letter-spacing: 0.05em !important;
-                }
-                article .blog-content h2 svg {
-                    width: 1.1em !important;
-                    height: 1.1em !important;
-                }
-                article .blog-content h2::before {
-                    content: "▎";
-                    color: #0df259;
-                    font-size: 0.8em;
-                    margin-right: 0.25rem;
-                }
-                article .blog-content h3 {
-                    font-size: 1.75rem !important; /* text-2xl */
+                    font-size: 1.875rem !important; /* text-3xl Standard Luxury */
+                    line-height: 1.4 !important;
                     font-weight: 700 !important;
-                    color: #fff !important;
-                    margin-top: 3rem !important; /* mt-12 */
-                    margin-bottom: 1.5rem !important; /* mb-6 */
+                    color: #fff !important; /* 標準は白、アクセントで緑 */
+                    margin-top: 3rem !important; 
+                    margin-bottom: 1.5rem !important;
+                    padding-bottom: 0.5rem !important;
+                    border-bottom: 2px solid rgba(255, 255, 255, 0.1) !important;
                     display: flex !important;
                     align-items: center !important;
                     gap: 0.5rem !important;
+                    text-transform: none !important; /* Uppercase解除 */
+                    letter-spacing: 0.02em !important;
                 }
+                article .blog-content h2::before {
+                    content: "●";
+                    color: #0df259;
+                    font-size: 0.6em;
+                    margin-right: 0.25rem;
+                }
+                article .blog-content h3 {
+                    font-size: 1.25rem !important; /* text-xl */
+                    font-weight: 700 !important;
+                    color: #e5e7eb !important;
+                    margin-top: 2.5rem !important;
+                    margin-bottom: 1rem !important;
+                    border-left: 3px solid #0df259;
+                    padding-left: 0.75rem !important;
+                    display: flex !important;
+                    align-items: center !important;
+                }
+
+                /* =========================================
+                   爆速サイト (hc9vbcn3ue) 専用オーバーライド
+                   ========================================= */
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 {
+                    font-size: 2.25rem !important; /* text-4xl Strong */
+                    font-weight: 800 !important;
+                    color: #4ade80 !important;
+                    margin-top: 4rem !important;
+                    margin-bottom: 2rem !important;
+                    padding-bottom: 0.75rem !important;
+                    border-bottom: 3px solid rgba(13, 242, 89, 0.5) !important;
+                    text-transform: uppercase !important; /* 復活 */
+                    letter-spacing: 0.05em !important;
+                }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2 svg {
+                    width: 1.2em !important;
+                    height: 1.2em !important;
+                    color: #fbbf24 !important; /* カラフルアイコン（Gold） */
+                }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h2::before {
+                    content: "▎";
+                    color: #0df259;
+                    font-size: 0.8em;
+                }
+                article[data-post-id="hc9vbcn3ue"] .blog-content h3 {
+                    font-size: 1.5rem !important; /* text-2xl */
+                    color: #fff !important;
+                    margin-top: 3rem !important;
+                }
+
+                article .blog-content h2 svg,
                 article .blog-content h3 svg {
                     width: 1.1em !important;
                     height: 1.1em !important;
@@ -657,7 +689,10 @@ export default async function BlogDetailPage({
                         )}
 
                         {/* 本文 */}
-                        <article className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}>
+                        <article
+                            data-post-id={id}
+                            className={`${toc.length > 0 ? "lg:col-span-3" : "lg:col-span-4"}`}
+                        >
 
                             <div
                                 className="blog-content prose prose-invert prose-green max-w-none"
