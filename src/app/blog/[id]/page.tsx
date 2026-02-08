@@ -4,8 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getBlogById, getBlogs } from "@/lib/microcms";
 import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
-import { renderToStaticMarkup } from 'react-dom/server';
-import { TrendingDown, Lightbulb, Brain, Code, Rocket, Flag, TriangleAlert } from 'lucide-react';
+
 
 
 // フォント設定
@@ -230,18 +229,21 @@ function transformContent(content: string): string {
     // アイコン自動置換
     // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
     // ========================================
+    // ========================================
+    // アイコン自動置換
+    // キーワード: trending_down, lightbulb, psychology, code, rocket_launch, flag -> Icon
+    // ========================================
     const iconMap = {
-        "trending_down": <TrendingDown className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "lightbulb": <Lightbulb className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "psychology": <Brain className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "code": <Code className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "rocket_launch": <Rocket className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "flag": <Flag className="inline-block mr-2 text-[#4ade80]" size={20} />,
-        "warning": <TriangleAlert className="inline-block mr-2 text-[#4ade80]" size={20} />,
+        "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trending-down inline-block mr-2 text-[#4ade80]"><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"></polyline><polyline points="16 17 22 17 22 11"></polyline></svg>',
+        "lightbulb": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb inline-block mr-2 text-[#4ade80]"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>',
+        "psychology": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain inline-block mr-2 text-[#4ade80]"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>',
+        "code": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code inline-block mr-2 text-[#4ade80]"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
+        "rocket_launch": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket inline-block mr-2 text-[#4ade80]"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>',
+        "flag": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag inline-block mr-2 text-[#4ade80]"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path><line x1="4" x2="4" y1="22" y2="15"></line></svg>',
+        "warning": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert inline-block mr-2 text-[#4ade80]"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>',
     };
 
-    Object.entries(iconMap).forEach(([keyword, icon]) => {
-        const svgString = renderToStaticMarkup(icon);
+    Object.entries(iconMap).forEach(([keyword, svgString]) => {
         // キーワードの前後にスペースがあるか、行頭・行末の場合のみ置換
         // HTMLタグの中身（属性値など）を誤爆しないように簡易的な対策
         transformed = transformed.replace(new RegExp(`(^|\\s|>)(${keyword})(\\s|<|$)`, 'g'), `$1${svgString}$3`);

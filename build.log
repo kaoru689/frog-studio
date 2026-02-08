@@ -1,0 +1,15 @@
+
+> flog-studio@0.1.0 build
+> next build
+
+   笆ｲ Next.js 15.5.10
+   - Environments: .env.local
+
+
+> Build error occurred
+[Error: EINVAL: invalid argument, readlink 'C:\Users\yokoy\OneDrive\繝・せ繧ｯ繝医ャ繝予AG\FLOG Studio\.next\diagnostics\build-diagnostics.json'] {
+  errno: -4071,
+  code: 'EINVAL',
+  syscall: 'readlink',
+  path: 'C:\\Users\\yokoy\\OneDrive\\繝・せ繧ｯ繝医ャ繝予\AG\\FLOG Studio\\.next\\diagnostics\\build-diagnostics.json'
+}

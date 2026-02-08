@@ -1,0 +1,29 @@
+
+> flog-studio@0.1.0 build
+> next build
+
+   笆ｲ Next.js 15.5.10
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./src/app/blog/[id]/page.tsx
+Error:   x You're importing a component that imports react-dom/server. To fix it, render or return the content directly as a Server Component instead for perf and security.
+  | Learn more: https://nextjs.org/docs/app/building-your-application/rendering
+   ,-[C:\Users\yokoy\OneDrive\繝・せ繧ｯ繝医ャ繝予AG\FLOG Studio\src\app\blog\[id]\page.tsx:7:1]
+ 4 | import Image from "next/image";
+ 5 | import { getBlogById, getBlogs } from "@/lib/microcms";
+ 6 | import { Space_Grotesk, Noto_Sans_JP } from "next/font/google";
+ 7 | import { renderToStaticMarkup } from 'react-dom/server';
+   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 8 | import { TrendingDown, Lightbulb, Brain, Code, Rocket, Flag, TriangleAlert } from 'lucide-react';
+ 9 | 
+ 9 | 
+   `----
+
+Import trace for requested module:
+./src/app/blog/[id]/page.tsx
+
+
+> Build failed because of webpack errors
