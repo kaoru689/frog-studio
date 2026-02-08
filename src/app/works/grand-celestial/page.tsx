@@ -264,11 +264,11 @@ export default function GrandCelestialPage() {
                                 </div>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email <span class="text-red-500">*</span></label>
+                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Email <span className="text-red-500">*</span></label>
                                         <input className="w-full bg-gray-50 border-gray-300 rounded-sm focus:border-[#0a1a3b] focus:ring focus:ring-[#0a1a3b]/20 transition-shadow py-3" placeholder="email@example.com" type="email" />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Phone <span class="text-red-500">*</span></label>
+                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Phone <span className="text-red-500">*</span></label>
                                         <input className="w-full bg-gray-50 border-gray-300 rounded-sm focus:border-[#0a1a3b] focus:ring focus:ring-[#0a1a3b]/20 transition-shadow py-3" placeholder="090-1234-5678" type="tel" />
                                     </div>
                                 </div>
