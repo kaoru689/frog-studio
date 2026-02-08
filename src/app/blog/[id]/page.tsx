@@ -200,6 +200,14 @@ function transformContent(content: string): string {
         `<blockquote class="cyber-quote">$1</blockquote>`
     );
 
+    // ========================================
+    // テキスト置換（ユーザー指定）
+    // ========================================
+    // "FROG Studioのチーフコンサルタント" -> "FROG Studio"
+    transformed = transformed.replace(/FROG Studioのチーフコンサルタント/g, "FROG Studio");
+    // 単体の "チーフコンサルタント" -> "FROG Studio"（念のため）
+    transformed = transformed.replace(/チーフコンサルタント/g, "FROG Studio");
+
     return transformed;
 }
 
@@ -584,7 +592,11 @@ export default async function BlogDetailPage({
                             {/* AI Visibility記事専用の特別画像 */}
                             {(function () {
                                 const title = (blog.title || "").normalize("NFKC");
-                                const isTarget = title.includes("AI Visibility") || (title.includes("AI") && title.includes("Visibility"));
+                                const isTarget =
+                                    blog.id.includes("ai-visibility") || // IDで判定（確実）
+                                    title.includes("AI Visibility") ||
+                                    (title.includes("AI") && title.includes("Visibility"));
+
                                 if (!isTarget) return null;
 
                                 return (
