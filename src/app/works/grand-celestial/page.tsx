@@ -258,7 +258,7 @@ export default function GrandCelestialPage() {
                                         <input className="w-full bg-gray-50 border-gray-300 rounded-sm focus:border-[#0a1a3b] focus:ring focus:ring-[#0a1a3b]/20 transition-shadow py-3" placeholder="例：山田 太郎" type="text" />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Phonetic <span class="text-red-500">*</span></label>
+                                        <label className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Phonetic <span className="text-red-500">*</span></label>
                                         <input className="w-full bg-gray-50 border-gray-300 rounded-sm focus:border-[#0a1a3b] focus:ring focus:ring-[#0a1a3b]/20 transition-shadow py-3" placeholder="例：ヤマダ タロウ" type="text" />
                                     </div>
                                 </div>
