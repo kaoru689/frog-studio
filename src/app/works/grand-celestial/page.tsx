@@ -53,6 +53,7 @@ export default function GrandCelestialPage() {
                         <Link href="#banquet" className="text-sm font-serif text-white/80 hover:text-[#cfaa6e] transition-colors uppercase tracking-widest">Banquet</Link>
                         <Link href="#cuisine" className="text-sm font-serif text-white/80 hover:text-[#cfaa6e] transition-colors uppercase tracking-widest">Cuisine</Link>
                         <Link href="#hospitality" className="text-sm font-serif text-white/80 hover:text-[#cfaa6e] transition-colors uppercase tracking-widest">Hospitality</Link>
+                        <Link href="#venue" className="text-sm font-serif text-white/80 hover:text-[#cfaa6e] transition-colors uppercase tracking-widest">Venue</Link>
                     </nav>
                     <button className="md:hidden text-[#cfaa6e]">
                         <span className="material-symbols-outlined text-3xl">menu</span>
@@ -165,22 +166,22 @@ export default function GrandCelestialPage() {
                         </div>
                         <div className="md:col-span-4 flex flex-col gap-4">
                             <div className="relative flex-1 overflow-hidden group">
-                                <img alt="Royal Blue Aisle Detail" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAx3XJuGb5IGBle5S5sBQx6_qdV7NhlNjHoQt-iHmxsfMLLRaj3V7abvbun8TAJyx4_sRzXaO4PTEtcewcT0Ww7yRqzrHoH-556DPvDHj0KsEI5l4sX0tjX9QtDu3AH4LzpIGY4Zn880L9w5WxA0iFn33mpCLfjn3KVlqHLloh7Ex8WzwOivUq-tZY7CH5rIR0kgmqQVnC-AVV9ht4u4H0GqReBQniSdr9GCgp8XdyM8sOCum-xEY_JF_g5bpBJLAo0s7bZoA-EHA" />
+                                <img alt="Royal Blue Aisle Detail" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="/images/grand-celestial/永遠を誓う、ロイヤルブルーの聖域_GRAND%20CELESTIAL_Weddings.jpg" />
                                 <div className="absolute bottom-4 left-4">
                                     <h3 className="text-white text-sm font-display tracking-wider bg-[#0a1a3b]/80 px-2 py-1">Royal Blue Aisle</h3>
                                 </div>
                             </div>
                             <div className="relative flex-1 overflow-hidden group">
-                                <img alt="High Ceiling Architecture" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF6G5CsvFTqvT6Qi7Xqm4Jnbg4XVKSgQkfWmHQ_GUTxpm3On-YV-GSmdhs8q2mooa3bil18wleWM0fh1AR0eZVTPTUHCVMBm0gMoM-CqvRQbjC9P_454WVTfrhb84lrSNDasZswiuBZ92x1o0A1zKf6FcI_oLEG6etGjCktGJwOKkA12vUwls3-pFO-kgGN9noC-O88UXRIF9Tip6cpKcS2DCgkn6G6hxgoEGKusCSEDp-6mA4tOzHR63zTSprjEYCVG4Oz1OlTg" />
+                                <img alt="High Ceiling Architecture" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="/images/grand-celestial/Whisk_93dc1adddfa429996cd43b9a19787e93eg.jpeg" />
                                 <div className="absolute bottom-4 left-4">
                                     <h3 className="text-white text-sm font-display tracking-wider bg-[#0a1a3b]/80 px-2 py-1">Gothic Architecture</h3>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div className="mt-4 relative h-64 md:h-80 overflow-hidden group w-full">
-                        <img alt="Ceremony Moment" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80" src="/images/grand-celestial/3f004ffe-30f2-4d74-abf2-b9471cd6ef1c.jpg" />
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="mt-4 relative min-h-[320px] h-[50vw] md:min-h-[420px] md:h-[36rem] max-h-[560px] overflow-hidden group w-full">
+                        <img alt="Ceremony Moment" className="w-full h-full object-contain md:object-cover transition-transform duration-1000 group-hover:scale-105 opacity-90" src="/images/grand-celestial/3f004ffe-30f2-4d74-abf2-b9471cd6ef1c.jpg" />
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
                             <p className="text-white font-display text-2xl md:text-3xl italic tracking-wider">"A sacred vow in a timeless sanctuary"</p>
                         </div>
                     </div>
@@ -206,7 +207,7 @@ export default function GrandCelestialPage() {
                     <div className="space-y-16">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div className="relative h-[400px] overflow-hidden shadow-xl group">
-                                <img alt="Grand Ballroom - Versailles" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCShpeJjZd_4tT8cDW0EhEaFMvXiKrawMdxQxoviOPGBMdQpPMbDXcLoKC7Qsa5gbBuFjmqy8hT9Ej1H1m2JDBM3ASKbZB7g8WIDXG76GixITD-fEkobECG50zmodn7xElzF07pue2DT1SWy2nb9kd1ZAYrNOQ0SxDziBl_0xB1VYC5Gy4Hb1moYLjAyhRSTtpe-PhiUr2Xq4Eg2mv8jTbcpYDX03gA91vvgwBU8Fl7eFdDzdeVHC7poBvFWe8bhmFuvffGoF4zeQ" />
+                                <img alt="Grand Ballroom - Versailles" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="/images/grand-celestial/Whisk_a3d943a89a6ee63b7cd446b0582d3bc7dr%20(1).png" />
                                 <div className="absolute bottom-0 left-0 bg-white/90 px-6 py-4">
                                     <h3 className="font-display text-xl text-[#0a1a3b]">Versailles</h3>
                                     <p className="text-xs text-gray-500 uppercase tracking-widest">Grand Ballroom</p>
@@ -225,7 +226,7 @@ export default function GrandCelestialPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div className="md:order-2 relative h-[400px] overflow-hidden shadow-xl group">
-                                <img alt="Modern Ballroom - Celestia" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiUNirxBHx0ggAUvYVAX2GEvXjlXTmzq1hEePVLBxzYhd7gHUnrq1FGlY-oi7u-1LOWL2EXwYh3jUW9G-k8oXet9EBpdCu2ZEKZ7wfFZdgasjtopwI6GYAUfb1qRIi63R8orb__anNYBNHqQwF58lClpQ06yHcYZYPWE14X1Q1LYJYgf7PZXQp47WqfBKXtlpgSv7_bJ2rsEV43FomIaFB3kCAaImAh8KrDSqdoUfwZSJZ7NFqESZ0csp9Yy9DP5FZZ7u2guqD9w" />
+                                <img alt="Modern Ballroom - Celestia" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="/images/grand-celestial/Whisk_hvjm5idojvjyjzwntcdnmjwlhjgn00iz2i2ytgt%20(1).jpeg" />
                                 <div className="absolute bottom-0 right-0 bg-white/90 px-6 py-4 text-right">
                                     <h3 className="font-display text-xl text-[#0a1a3b]">Celestia</h3>
                                     <p className="text-xs text-gray-500 uppercase tracking-widest">Sky View Room</p>
@@ -244,7 +245,7 @@ export default function GrandCelestialPage() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                             <div className="relative h-[400px] overflow-hidden shadow-xl group">
-                                <img alt="Classic Ballroom - Royal Suite" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDn0cm3vwQ52ttQbYZwSRiZb_KvEGc9BIJe8wJExzs6NwkG_2BA8RiiqVwb9iltehsOBjN4heSihn4_wSGhmL7jMDhf5iSoItdoHmkWLUIGuKaNL3FMi3CkbQ26ayYAzti9wOS6WpvJa5xw63Ze74E6RrZj-cw0JDKLmL4-K3osoSWwVgSQe1WqpPaUITJB3jNo7GG8FXIVXxFhFbULrZ5gzpcz3NONJeR5ziuFWV4whLSUs9hSvZuD8JMAPRRS_dLB2Br1BrPmzA" />
+                                <img alt="Classic Ballroom - Royal Suite" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" src="/images/grand-celestial/Whisk_640394d5ef60a57bb464bea9cf1a1755eg%20(1).jpeg" />
                                 <div className="absolute bottom-0 left-0 bg-white/90 px-6 py-4">
                                     <h3 className="font-display text-xl text-[#0a1a3b]">Royal Suite</h3>
                                     <p className="text-xs text-gray-500 uppercase tracking-widest">Private Residence</p>
@@ -291,7 +292,7 @@ export default function GrandCelestialPage() {
                         </div>
                         {/* Cuisine Item 2 */}
                         <div className="group relative aspect-[3/4] overflow-hidden cursor-pointer border border-white/10 lg:mt-12">
-                            <img alt="Main Dish Meat" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/228b398f-70b3-46c3-b389-439e2d37c5f3.jpg" />
+                            <img alt="Main Dish Meat" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/Whisk_3b63403e7fa4045a5704aa1b96ae51dcdr%20(1).png" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <div className="absolute bottom-6 left-6 text-white">
                                     <p className="text-xs uppercase tracking-widest text-[#cfaa6e] mb-1">Viande</p>
@@ -301,7 +302,7 @@ export default function GrandCelestialPage() {
                         </div>
                         {/* Cuisine Item 3 */}
                         <div className="group relative aspect-[3/4] overflow-hidden cursor-pointer border border-white/10">
-                            <img alt="Seafood Dish" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGiIZR4_pEgSCg_omMEfzohAgNDdkiK_UEhO6HBI5SfdVxo3Cw1I9_UjJx0tL8jz8hHoGDR3ndvMxtNyuySmLkPluE2ZeZRZlAkBnDu-4wyxj9hYYl6l3lVPvXX4V0MivomgmOHajdToSu2Mzmx7YUg2unJNm87uVc27yReYBm7IVBs0eZAoK26DPB3PdJQo0xnUicm2IRo1vvXxP5fp0VjgPjSnDkS2rA4OLNJjYvReYxMNUcsgxAELgcP2hVrU_NYYRGlHuFbA" />
+                            <img alt="Seafood Dish" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/Whisk_7b30ba31b05625bbad4404968e0d8320dr%20(1).png" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <div className="absolute bottom-6 left-6 text-white">
                                     <p className="text-xs uppercase tracking-widest text-[#cfaa6e] mb-1">Poisson</p>
@@ -311,7 +312,7 @@ export default function GrandCelestialPage() {
                         </div>
                         {/* Cuisine Item 4 */}
                         <div className="group relative aspect-[3/4] overflow-hidden cursor-pointer border border-white/10 lg:mt-12">
-                            <img alt="Exquisite Dessert" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsJtK464zeg9_QS7nJUBAhw7JM2gEh2gsrnuYoIJxW8WGp-PHlNrURw40NYvGA-oRSc59TVj7bYZ_pCqh34SoO96AbYn80KbtMr9PGNQ7XfGqOY9Z3eLf6jxtS4Ql7BpjwgSlrGvePo0Ene-_CwerAj2x9nmPpmhkuO_HtioaeVYOWsJmXhsm45F2t9F7afranq5-nsRB1XgpcJiZXWx5YvrbuCbPfTwOwAkw8QLh5iODZx229UycDRcWRb6PJ4LuXUtG7OoKwWw" />
+                            <img alt="Exquisite Dessert" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/Whisk_39556c64becf0208b6a404469e279f2aeg%20(1).jpeg" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <div className="absolute bottom-6 left-6 text-white">
                                     <p className="text-xs uppercase tracking-widest text-[#cfaa6e] mb-1">Dessert</p>
@@ -341,7 +342,7 @@ export default function GrandCelestialPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                         <div className="bg-white shadow-lg overflow-hidden group">
                             <div className="h-64 overflow-hidden relative">
-                                <img alt="Dress Salon Interior" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAxQENz-Nk-jCko48AXbik369MyV7e3_XlxenmfFgXywP4TnD-xZjjgsezHEkd8t7k_ESYxzrqppcKHpUUpEX84fnge9Sgh0cp-e3gyNHGYKKH_hfgbUv6AZ0jrLYoW41-6qO3op3r108TOOtmfXh7rBoH5f_9gBw9_xIEiZLk0dmvgQe6HRJ8CmB99jgA8NU9MGHc6H8n1AJmAxHaYUHZF9TDQS_jS8M9yR3Z9CrsIiNaibz-AZFrRx5iVYRQ8hoseE3EsSQXEow" />
+                                <img alt="Dress Salon Interior" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/Whisk_0383ef1b1d8395098ce406c45671e3fceg%20(1).jpeg" />
                                 <div className="absolute inset-0 bg-[#0a1a3b]/20 group-hover:bg-transparent transition-colors"></div>
                             </div>
                             <div className="p-8 text-center">
@@ -365,7 +366,7 @@ export default function GrandCelestialPage() {
                         </div>
                         <div className="bg-white shadow-lg overflow-hidden group">
                             <div className="h-64 overflow-hidden relative">
-                                <img alt="Premium Gifts" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuACzb5hRxMaQ3RKWxAl68HE5JevK6f4nvIFeXuaOv-mwWFu4fBvZG_q4XMN6B02vh9Hy6IE4VclwzyLwB7usHqONELXMt5_9ZILisUm_SNbJ_EER2nkSYamSeTkF8IiE8Fq24elHw79hAA_0umt7L5SH70lgFE3J7j_IIL3tIKGMxMIqtlx8mt7mmgNsfUhpbQbs7xs3cEgIVNy4ZmYUMtuR7VBZMQ3hHD6ivnr71_CYFp1oB9Bsf1l3fKUhoUDwgeK404nIfPJrA" />
+                                <img alt="Premium Gifts" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/Whisk_5187d83ade8db1e94544e6f2ba2c9fafeg%20(1).jpeg" />
                                 <div className="absolute inset-0 bg-[#0a1a3b]/20 group-hover:bg-transparent transition-colors"></div>
                             </div>
                             <div className="p-8 text-center">
@@ -393,35 +394,24 @@ export default function GrandCelestialPage() {
                             </Link>
                         </div>
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
-                        <div className="row-span-2 col-span-2 md:col-span-1 relative group overflow-hidden rounded-sm">
-                            <img alt="Couple portrait" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Y0J_p47G_meiqtH1zpi6IqVkY5Q58CaUar68tdYOhqaxx1_Jbb7dbt-uChmnVr9splM3XSyNvxN8pNVwjw7JBOacdO8MVzpljU_K794ldFY-9hIZBdWmynZS54hYK-argIKDapQYj47YXyiEurkjszzE1NO0WlSDQQSu9oprV4qpm9NtB6obt3gGLksBd49vz4HIiO62uHWIeTCgqPqosR2dlPF7ybfaK9lbMt0K0ntyng5EsxhgRD7Sb5bDVDwgIoJOCzrzMA" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="absolute bottom-4 left-4 text-white">
-                                    <p className="text-xs">2023.10.15</p>
-                                    <p className="font-display">Y & M Wedding</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-span-2 relative group overflow-hidden rounded-sm">
-                            <img alt="Ceremony scene" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjzWfI0zxweDPLPUMWUSUAh7yEUrJu_6idatctvrCp8Q5PGkXF_DiniNyVjvr10Qs60gUW1QQpayFKwt2y1ur9MpFZyr9XVMEGomKkkkAbNOXhZ-2Gd_uMs4kfSdiSSay8CoQNXE0KuftOBjTaUisulcnriUNKwuS2c6PDgl0yvmSBqzA-zOZ4Nb5rMov268R-eBBjZgUMWpBhcxcxpU6U30ZXmTW0eWS5_Eu0ItqBZZF2et5VBw7MPqKlKKLMF6ZCRm6Pde7aWA" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="absolute bottom-4 left-4 text-white">
-                                    <p className="text-xs">Emotional Moment</p>
-                                </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[180px] md:auto-rows-[220px]">
+                        <div className="row-span-2 col-span-2 relative group overflow-hidden rounded-sm">
+                            <img alt="Real Wedding" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_dd19daaea874ca392224aa59f22ec8a2dr.png" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="absolute bottom-3 left-3 text-white text-sm font-serif">幸せの記憶</div>
                             </div>
                         </div>
                         <div className="relative group overflow-hidden rounded-sm">
-                            <img alt="Ring exchange" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuASCV_Egz9AjmLAz0PvHo-an3tNUocTcQat7A7OPSX69BWCCgCJrTmr5-bFPHgqhrPzOZsr9sImK_w5OkL0WsIuDOxA0vsA-tVKm3f7f1OMoxMt2pZPsHnEgbAJXuSpQgF37Qox3XQmOY3TJOvTs5fbqlNTqZTOMvJM-MKisXsOI8u57STx6skX8usG1Ih9Prsh6g2UXcDve6Jb9qqAion-S6cJ8Fik1x34xZLOmvtYPhEd_9aSt4lh1as4oR-TM8C0T7g16v9ivA" />
+                            <img alt="Real Wedding" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_5962bab1e65a8e98d80426b3cbb39e76dr.png" />
                         </div>
                         <div className="relative group overflow-hidden rounded-sm">
-                            <img alt="Bride smiling" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkSFd68ZnWHxK_zaPflYmRCz4RldMkDD72yQ-5RaQwtuSsr-yhiQWwAaREpmxJLBaHa2IU4VaTGcMo6S84YBiUM90SiTyQrn6wv2TKFuNL1j6pu92lAA9gbczZOIRoOBpJlhFsU7bj1XgSSnlDtTYHgR8kdFZoAQoD-Ucb9lUtoIdh1g4V_IREyo7sUepGOPWz_0KkjN7zNNI4HgVh-O1DLRvnf4zZzk5A1E5AcdO4R_VRk6k9hHTO_mWwI97bbY6DXfaXMrX34Q" />
+                            <img alt="Real Wedding" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_40fdef55a69e3f3927848fe6a3be99cddr%20(1).png" />
                         </div>
-                        <div className="col-span-2 relative group overflow-hidden rounded-sm">
-                            <img alt="Toast" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSWWt5DoTLN5wOWlfIJYX49vVbbCN3CAyZVoR-UyoAGYzGDm8KIeO5coonEeV3vPZohOEc9hG0jTp7Sd_Rqf5E69m53i6cpGHAIACJVemTPl3HRlEMjBefODzvlbYc7E5S2kF67qqIVF4V4rAmIhf23h1z97Z62JsVz75PKBRRnohNXamln3quP7e8C_W5yJFA5OGwSJbrCC9ynnYMGuaRmZISQW7tEREJmKllh-daJjtVR44fXhTqA0JDBSTWv4o63PEyS6HL6Q" />
+                        <div className="relative group overflow-hidden rounded-sm">
+                            <img alt="Real Wedding" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_267e8a0514eaaf29ac8445486ec7e850eg.jpeg" />
                         </div>
-                        <div className="row-span-2 col-span-2 md:col-span-1 relative group overflow-hidden rounded-sm">
-                            <img alt="Table setting" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAe4aIJyvWKF6HIKX2WTmVoUwkDz14XnO_CX2jFkNlpSJuGUlojSMGQg3vERdup1RyDUziGdtXMgCporZMe_fs-PvcWTH8mPDJYdGJpFT5erfYa4zDmaObWg6cRuNPrfBfoci5TPcyni91V0WoxGk6UYQeYtWJyz4p4CcxSe3rojNKUq8K4perxxiJUdb-kuOk3rxFZwXEp3D4ud-9SIJGctSKBbzbn7FKzK44Yp6mV0BkWl5Vh7DkJy3hkAJ7ck9gis-uR_4J6AA" />
+                        <div className="relative group overflow-hidden rounded-sm">
+                            <img alt="Real Wedding" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_23cfd864d9f39329697411ff57580339eg%20(1).jpeg" />
                         </div>
                     </div>
                     <div className="mt-8 text-center md:hidden">
@@ -453,6 +443,34 @@ export default function GrandCelestialPage() {
                             <span className="material-symbols-outlined text-4xl text-[#cfaa6e] mb-4">subway</span>
                             <h3 className="font-bold text-lg mb-2">好アクセス</h3>
                             <p className="text-sm text-gray-600">表参道駅徒歩1分。遠方ゲストも安心の立地。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 会場案内 - Venue Guide */}
+            <section className="py-20 bg-[#f8f8f8] border-t border-gray-100" id="venue">
+                <div className="container mx-auto px-4 max-w-6xl">
+                    <div className="text-center mb-12">
+                        <span className="text-[#cfaa6e] tracking-[0.3em] uppercase text-sm font-bold block mb-2">Venue Guide</span>
+                        <h2 className="text-3xl md:text-4xl font-display text-[#0a1a3b] mb-4">会場案内</h2>
+                        <div className="w-16 h-1 bg-[#cfaa6e] mx-auto"></div>
+                    </div>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                        <div className="relative overflow-hidden rounded-sm shadow-xl group">
+                            <img alt="Grand Celestial 結婚式場外観" className="w-full h-full object-cover aspect-[4/3] transition-transform duration-700 group-hover:scale-105" src="/images/grand-celestial/Whisk_93dc1adddfa429996cd43b9a19787e93eg.jpeg" />
+                        </div>
+                        <div className="px-0 lg:px-6">
+                            <h3 className="text-xl md:text-2xl font-display text-[#0a1a3b] mb-4 font-bold">歴史ある建物として、格式高く。</h3>
+                            <p className="text-gray-600 font-serif leading-relaxed mb-4">
+                                GRAND CELESTIALは、由緒ある歴史的建造物を大切に受け継ぎ、結婚式場として甦らせた特別な場所です。重厚な外観と洗練された佇まいは、訪れる方々に深い感動と信頼をお届けします。
+                            </p>
+                            <p className="text-gray-600 font-serif leading-relaxed text-sm">
+                                表参道の静謐な立地に佇む当館は、伝統とモダンが調和した唯一無二の空間。挙式から披露宴まで、お二人の門出を格式高くお支えいたします。
+                            </p>
+                            <Link href="#booking" className="inline-block mt-6 px-8 py-3 bg-[#0a1a3b] text-white font-serif text-sm font-bold hover:bg-[#0a1a3b]/90 transition-colors uppercase tracking-widest">
+                                アクセス・ご予約
+                            </Link>
                         </div>
                     </div>
                 </div>
