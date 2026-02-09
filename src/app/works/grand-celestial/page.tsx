@@ -61,7 +61,7 @@ export default function GrandCelestialPage() {
             </header>
             <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-black">
                 <div className="absolute inset-0 z-0">
-                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="/images/grand-celestial/top-hero-new.jpg" />
+                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="/images/grand-celestial/3f004ffe-30f2-4d74-abf2-b9471cd6ef1c.jpg" />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a3b]/60 via-[#0a1a3b]/30 to-black/80 mix-blend-multiply"></div>
                 </div>
                 <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto mt-10">
@@ -157,7 +157,7 @@ export default function GrandCelestialPage() {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
                         <div className="md:col-span-8 relative aspect-[4/3] overflow-hidden group">
-                            <img alt="Stained Glass Chapel Interior" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0a3x0-Flgv0z8eQxo62VpqsVbJOdvPVDMRw1ExkHV0hDB75PBTPm0AAUi-twR8H0us2k1xIszFw_VJalTF6nub0BGRd_JZDb-cyllbfz-cHMuHmJIoUDNix2h5hK2iz9mjJ5xkTqJcMGcZoQTZ2NxsMEL5dAamMVgbpwHewdinvr-zyLXCBYpLkjP2omloGQwlrd9qpeC6ISQr0k1wNHcd-qXRY88pE7jsMDHcq8zMaxSYN0TeVlqVN-ua8DNpw_9apivFI0uWg" />
+                            <img alt="Stained Glass Chapel Interior" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" src="/images/grand-celestial/3a37e4e9-84a0-46ab-ae0e-a42d6fa4718b.jpg" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <div className="absolute bottom-6 left-6">
                                 <h3 className="text-white text-xl font-display tracking-wider">Stained Glass Cathedral</h3>
@@ -179,7 +179,7 @@ export default function GrandCelestialPage() {
                         </div>
                     </div>
                     <div className="mt-4 relative h-64 md:h-80 overflow-hidden group w-full">
-                        <img alt="Ceremony Moment" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzhfGu15ESWeyK9Pid1qaO0NMVeWuvwinG84Lqb4l_6GChDE44LbFz6_OyCEssBN5T1IiTFIzbCwepL5P4GUsbjRtJ3XhYnk8URkTl-dB-nHZ4EDidLtmfau29yvPtgjNc_X6nRql9THNsgdMCdb1PNw9L6uGa6IQBn2_Ww-CF3wAECPgh8y8asAwpef4qTFAfRFstSjSnPMU_63hsBiOGPVNexlliQocczMvSCD6_tfmSO29hn2gtE_04pysIsCxLjonFx4XIjg" />
+                        <img alt="Ceremony Moment" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80" src="/images/grand-celestial/6bf8fabd-fbc6-4b0b-9f54-3af7e2c03beb.jpg" />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                             <p className="text-white font-display text-2xl md:text-3xl italic tracking-wider">"A sacred vow in a timeless sanctuary"</p>
                         </div>
@@ -281,7 +281,7 @@ export default function GrandCelestialPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
                         {/* Cuisine Item 1 */}
                         <div className="group relative aspect-[3/4] overflow-hidden cursor-pointer border border-white/10">
-                            <img alt="Appetizer Art" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDHwqhEJGyEfWxkWhsBGtzVG60LK0rW_U0LQB-a8ASa2Qn9HC2EBiCCEQGwNj1iMDt8vhrrz3LIRpBtCvo4OApOcl7UjUUu4z8y_akqeySDmV55fzdk9_HDavtxDx5qiTEO8BGwVjCqlxvlWWqGKoM1T1lm1E88FM0nYINKNDsVGaDYECzOR8GZ3IkIp9TmMSH5bCVy7Y3TNiGHdzQDaAy2FvaD6EgQwCiNrzZaAsAu1qStS10kZM8iKX8qev7TgI8W9aJP50tjkA" />
+                            <img alt="Appetizer Art" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/c0b31cd9-2404-491b-8699-83d8f73071d7.jpg" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <div className="absolute bottom-6 left-6 text-white">
                                     <p className="text-xs uppercase tracking-widest text-[#cfaa6e] mb-1">Appetizer</p>
@@ -291,7 +291,7 @@ export default function GrandCelestialPage() {
                         </div>
                         {/* Cuisine Item 2 */}
                         <div className="group relative aspect-[3/4] overflow-hidden cursor-pointer border border-white/10 lg:mt-12">
-                            <img alt="Main Dish Meat" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCc5ygc6AkCOX1zMy0eBlMdwFhEEkPkJIfcLb2MpR5_wFwgLzhpD1631gTniWP-NnHR4SfhY9gPQelIe4KBdx6pdBh16dLmvxxJjUD4GmAMejQ31u0IfZK5mrwlAB1TkKlyu8nLmMKXsnv2oh88TtcNf_181UUJCHD4jev6hF4LfieI9_10Yt4qAYa486r0WYK4sNOdEtzlLnEGWOXdTyTOtqqq6Eefyw8V9po_LHgiG9u30zHaCsCCoFRiadHC5OmFKa9v-X5aKw" />
+                            <img alt="Main Dish Meat" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="/images/grand-celestial/228b398f-70b3-46c3-b389-439e2d37c5f3.jpg" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                                 <div className="absolute bottom-6 left-6 text-white">
                                     <p className="text-xs uppercase tracking-widest text-[#cfaa6e] mb-1">Viande</p>
