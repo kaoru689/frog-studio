@@ -216,11 +216,11 @@ export default function GrandCelestialPage() {
                             <div className="px-4 md:px-8">
                                 <h3 className="text-2xl font-display text-[#0a1a3b] mb-4">Versailles - ベルサイユ</h3>
                                 <p className="text-gray-600 mb-6 leading-relaxed font-serif">
-                                    最大180名様まで収容可能なメインバンケット。高さ6mの天井に輝くボヘミアンクリスタルのシャンデリアが、圧倒的な非日常空間を演出します。
+                                    最大180名様まで収容可能なメインバンケット。高さ20mの天井に輝くボヘミアンクリスタルのシャンデリアが、圧倒的な非日常空間を演出します。
                                 </p>
                                 <ul className="text-sm text-gray-500 space-y-2 font-serif">
                                     <li className="flex items-center"><span className="w-2 h-2 bg-[#cfaa6e] rounded-full mr-3"></span>着席: 80〜180名</li>
-                                    <li className="flex items-center"><span className="w-2 h-2 bg-[#cfaa6e] rounded-full mr-3"></span>天井高: 6.5m</li>
+                                    <li className="flex items-center"><span className="w-2 h-2 bg-[#cfaa6e] rounded-full mr-3"></span>天井高: 20.5m</li>
                                 </ul>
                             </div>
                         </div>
