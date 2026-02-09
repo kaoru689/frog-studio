@@ -85,61 +85,81 @@ export default function GrandCelestialPage() {
                     <span className="material-symbols-outlined text-4xl">keyboard_arrow_down</span>
                 </div>
             </section>
-            <section className="py-24 bg-white relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#cfaa6e] to-transparent"></div>
+            <section className="py-28 bg-gradient-to-b from-[#fdfbf7] via-[#faf6ef] to-white relative overflow-hidden">
+                <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z' fill='%23cfaa6e' fill-opacity='1' fill-rule='nonzero'/%3E%3C/g%3E%3C/svg%3E\")" }}></div>
+                <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#cfaa6e]/60 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#cfaa6e]/40 to-transparent"></div>
                 <div className="container mx-auto px-4 relative z-10">
-                    <div className="text-center mb-16">
-                        <span className="text-[#cfaa6e] tracking-[0.3em] uppercase text-sm font-bold block mb-2">Limited Time Offer</span>
-                        <h2 className="text-3xl md:text-5xl font-display font-bold text-[#0a1a3b] mb-6">
-                            <span className="border-b-2 border-[#cfaa6e] pb-2">Exclusive Fair Benefits</span>
+                    <div className="text-center mb-20">
+                        <span className="inline-block text-[#cfaa6e] tracking-[0.4em] uppercase text-xs font-bold mb-3 px-4 py-1 border border-[#cfaa6e]/40 rounded-full">Limited Time Offer</span>
+                        <h2 className="text-3xl md:text-5xl font-display font-bold text-[#0a1a3b] mb-4 tracking-wide">
+                            <span className="relative inline-block pb-3 border-b-2 border-[#cfaa6e]">Exclusive Fair Benefits</span>
                         </h2>
-                        <p className="text-gray-600 font-serif">
+                        <p className="text-gray-600 font-serif mt-6 text-sm md:text-base tracking-wider">
                             本フェア限定の特別な特典をご用意いたしました
                         </p>
                     </div>
-                    <div className="flex flex-col md:flex-row justify-center gap-10 md:gap-20 items-center">
-                        <div className="relative w-72 h-72 md:w-80 md:h-80 group cursor-pointer">
-                            <div className="absolute inset-0 rounded-full border border-[#cfaa6e]/30 scale-90 group-hover:scale-100 transition-transform duration-700"></div>
-                            <div className="absolute inset-0 rounded-full border border-[#cfaa6e]/10 scale-110 group-hover:scale-95 transition-transform duration-700 delay-100"></div>
-                            <div className="absolute inset-4 bg-gradient-to-br from-[#fbf5e6] to-[#f0e6d2] rounded-full shadow-2xl flex flex-col items-center justify-center p-6 text-center z-10 border border-[#cfaa6e]">
-                                <div className="w-12 h-1 bg-[#cfaa6e] mb-4"></div>
-                                <span className="text-[#0a1a3b] font-serif text-sm tracking-widest mb-2">来館特典</span>
-                                <h3 className="font-display text-xl text-[#0a1a3b] mb-1">Amazonギフト券</h3>
-                                <div className="font-display text-5xl font-bold text-[#cfaa6e] text-shadow-sm mb-2">2<span className="text-2xl ml-1">万円</span></div>
-                                <p className="text-xs text-gray-500 font-serif tracking-wider">カップルでのご来館限定</p>
+                    <div className="flex flex-col md:flex-row justify-center gap-14 md:gap-24 items-center">
+                        <div className="relative w-80 h-80 md:w-96 md:h-96 group cursor-pointer">
+                            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#cfaa6e]/20 to-[#cfaa6e]/5 scale-95 group-hover:scale-100 transition-all duration-700 rounded-full"></div>
+                            <div className="absolute inset-0 rounded-full border-2 border-[#cfaa6e]/40 scale-90 group-hover:scale-100 transition-transform duration-700 shadow-xl"></div>
+                            <div className="absolute inset-3 rounded-full bg-gradient-to-br from-[#fefdf9] via-[#f9f4e8] to-[#f0e9d8] flex flex-col items-center justify-center p-8 text-center z-10 border border-[#cfaa6e]/50 shadow-2xl group-hover:shadow-[0_0_40px_rgba(207,170,110,0.15)] transition-shadow duration-500">
+                                <div className="w-14 h-0.5 bg-gradient-to-r from-transparent via-[#cfaa6e] to-transparent mb-5"></div>
+                                <span className="text-[#0a1a3b] font-serif text-xs tracking-[0.35em] mb-2 uppercase">来館特典</span>
+                                <h3 className="font-display text-2xl text-[#0a1a3b] mb-2 tracking-wide">Amazonギフト券</h3>
+                                <div className="font-display text-5xl md:text-6xl font-bold bg-gradient-to-b from-[#b8860b] to-[#cfaa6e] bg-clip-text text-transparent mb-2">2<span className="text-2xl md:text-3xl ml-1 font-semibold">万円</span></div>
+                                <p className="text-xs text-gray-500 font-serif tracking-widest">カップルでのご来館限定</p>
                             </div>
                         </div>
-                        <div className="relative w-72 h-72 md:w-80 md:h-80 group cursor-pointer mt-8 md:mt-0">
-                            <div className="absolute inset-0 rounded-full border border-[#cfaa6e]/30 scale-90 group-hover:scale-100 transition-transform duration-700"></div>
-                            <div className="absolute inset-0 rounded-full border border-[#cfaa6e]/10 scale-110 group-hover:scale-95 transition-transform duration-700 delay-100"></div>
-                            <div className="absolute inset-4 bg-[#0a1a3b] text-white rounded-full shadow-2xl flex flex-col items-center justify-center p-6 text-center z-10 border-2 border-[#cfaa6e]">
-                                <div className="w-12 h-1 bg-[#cfaa6e] mb-4"></div>
-                                <span className="text-[#cfaa6e] font-serif text-sm tracking-widest mb-2">成約特典</span>
-                                <h3 className="font-display text-xl text-white mb-1">ウェディングドレス</h3>
-                                <div className="font-display text-4xl font-bold text-[#cfaa6e] mb-2">2着プレゼント</div>
-                                <p className="text-xs text-gray-400 font-serif tracking-wider">※挙式時期による</p>
+                        <div className="relative w-80 h-80 md:w-96 md:h-96 group cursor-pointer mt-8 md:mt-0">
+                            <div className="absolute inset-0 rounded-full bg-[#cfaa6e]/10 scale-95 group-hover:scale-100 transition-all duration-700"></div>
+                            <div className="absolute inset-0 rounded-full border-2 border-[#cfaa6e]/60 scale-90 group-hover:scale-100 transition-transform duration-700 shadow-xl"></div>
+                            <div className="absolute inset-3 rounded-full bg-gradient-to-b from-[#0c1d3d] to-[#0a1a3b] flex flex-col items-center justify-center p-8 text-center z-10 border-2 border-[#cfaa6e]/70 shadow-2xl group-hover:shadow-[0_0_50px_rgba(207,170,110,0.2)] transition-shadow duration-500">
+                                <div className="w-14 h-0.5 bg-gradient-to-r from-transparent via-[#cfaa6e] to-transparent mb-5"></div>
+                                <span className="text-[#cfaa6e] font-serif text-xs tracking-[0.35em] mb-2 uppercase">成約特典</span>
+                                <h3 className="font-display text-2xl text-white mb-2 tracking-wide">ウェディングドレス</h3>
+                                <div className="font-display text-4xl md:text-5xl font-bold text-[#cfaa6e] mb-2 whitespace-nowrap">2着サービス</div>
+                                <p className="text-xs text-gray-400 font-serif tracking-widest">※挙式時期による</p>
                             </div>
                         </div>
                     </div>
+                    <div className="text-center mt-16">
+                        <Link href="#booking" className="inline-flex items-center gap-3 px-8 py-4 bg-[#0a1a3b] text-white font-serif text-sm font-bold hover:bg-[#0a1a3b]/90 hover:text-[#cfaa6e] transition-all uppercase tracking-widest rounded-sm border border-[#cfaa6e]/50">
+                            <span className="material-symbols-outlined text-xl">calendar_month</span>
+                            ブライダルフェアを予約する
+                        </Link>
+                        <p className="text-gray-500 text-xs mt-3 font-serif">まずはフェアで会場の雰囲気と特典をご体験ください</p>
+                    </div>
                 </div>
             </section>
-            <section className="py-16 bg-[#0a1a3b] relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-20"></div>
-                <div className="absolute -left-20 -top-20 w-64 h-64 bg-[#cfaa6e]/20 rounded-full blur-3xl"></div>
-                <div className="absolute -right-20 -bottom-20 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
+            <section className="py-24 md:py-28 bg-gradient-to-b from-[#060d1f] via-[#0a1a3b] to-[#081428] relative overflow-hidden">
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] opacity-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-[#cfaa6e]/5 via-transparent to-[#cfaa6e]/5"></div>
+                <div className="absolute -left-32 -top-32 w-96 h-96 bg-[#cfaa6e]/15 rounded-full blur-3xl"></div>
+                <div className="absolute -right-32 -bottom-32 w-96 h-96 bg-[#cfaa6e]/10 rounded-full blur-3xl"></div>
                 <div className="container mx-auto px-4 relative z-10 text-center">
-                    <h2 className="text-white font-serif text-lg md:text-2xl mb-2 tracking-[0.2em] opacity-80">GRAND OPENING CAMPAIGN</h2>
-                    <div className="flex flex-col md:flex-row justify-center items-end gap-2 md:gap-6 text-[#cfaa6e] leading-none py-6">
-                        <span className="text-2xl md:text-4xl font-display font-light self-center md:self-end mb-2">最大</span>
-                        <span className="text-7xl md:text-9xl font-display font-bold text-shadow-heavy bg-clip-text text-transparent bg-gradient-to-b from-[#ffd700] to-[#bfa15f]">160</span>
-                        <div className="flex flex-col items-start self-center md:self-end mb-2">
+                    <div className="inline-block px-6 py-2 border border-[#cfaa6e]/50 rounded-full mb-6">
+                        <span className="text-[#cfaa6e] font-serif text-sm md:text-base tracking-[0.35em] uppercase">GRAND OPENING CAMPAIGN</span>
+                    </div>
+                    <div className="flex flex-col md:flex-row justify-center items-end gap-3 md:gap-8 text-[#cfaa6e] leading-none py-8">
+                        <span className="text-2xl md:text-4xl font-display font-light self-center md:self-end">最大</span>
+                        <div className="relative inline-block">
+                            <span className="relative z-10 text-7xl md:text-9xl font-display font-bold text-shadow-heavy bg-clip-text text-transparent bg-gradient-to-b from-[#ffe066] via-[#ffd700] to-[#b8860b] drop-shadow-[0_0_30px_rgba(255,215,0,0.3)]">100</span>
+                        </div>
+                        <div className="flex flex-col items-start self-center md:self-end">
                             <span className="text-3xl md:text-5xl font-bold">万円</span>
                             <span className="text-xl md:text-2xl text-white font-serif tracking-widest">OFF</span>
                         </div>
                     </div>
-                    <p className="text-gray-400 text-xs md:text-sm mt-6 font-serif max-w-2xl mx-auto border-t border-white/10 pt-4">
+                    <p className="text-gray-400 text-xs md:text-sm mt-8 font-serif max-w-2xl mx-auto border-t border-white/10 pt-6 tracking-wide">
                         ※2025年12月までの挙式・披露宴をご成約の方限定 ※40名様以上のプランに適用 ※他特典との併用不可
                     </p>
+                    <div className="mt-12">
+                        <Link href="#booking" className="inline-flex items-center gap-2 px-10 py-4 bg-[#cfaa6e] text-[#0a1a3b] font-display font-bold hover:bg-[#cfaa6e]/90 transition-colors uppercase tracking-widest text-sm rounded-sm">
+                            ブライダルフェアで体験する
+                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                        </Link>
+                    </div>
                 </div>
             </section>
             <section className="bg-[#0c162d] py-24 border-b border-white/5" id="chapel">
@@ -324,8 +344,9 @@ export default function GrandCelestialPage() {
                     <div className="text-center mt-16 bg-white/5 p-8 border border-white/10 backdrop-blur-sm">
                         <h3 className="text-2xl font-display text-[#cfaa6e] mb-4">Royal Tasting Experience</h3>
                         <p className="text-gray-300 font-serif mb-6 text-sm">ブライダルフェアでは、シェフ特製のハーフコース試食（無料）をご用意しております。</p>
-                        <Link href="#booking" className="inline-block px-8 py-3 border border-white/30 text-white hover:bg-[#cfaa6e] hover:text-[#0a1a3b] hover:border-[#cfaa6e] transition-all uppercase tracking-widest text-xs">
-                            試食付きフェアを予約する
+                        <Link href="#booking" className="inline-flex items-center gap-2 px-8 py-3 border border-[#cfaa6e] text-[#cfaa6e] hover:bg-[#cfaa6e] hover:text-[#0a1a3b] transition-all uppercase tracking-widest text-xs font-bold">
+                            試食付きブライダルフェアを予約する
+                            <span className="material-symbols-outlined text-sm">arrow_forward</span>
                         </Link>
                     </div>
                 </div>
@@ -375,6 +396,53 @@ export default function GrandCelestialPage() {
                                     ゲストへの感謝を伝える、厳選された引出物やオリジナルギフトの数々。
                                 </p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* フェアを体験したお客様の声 */}
+            <section className="bg-gradient-to-b from-[#0c162d] to-[#060d1f] py-24 border-y border-white/10">
+                <div className="container mx-auto px-4 max-w-6xl">
+                    <div className="text-center mb-14">
+                        <span className="text-[#cfaa6e] tracking-[0.3em] uppercase text-sm font-bold block mb-2">Voice</span>
+                        <h2 className="text-3xl md:text-4xl font-display text-white">フェアを体験したお客様の声</h2>
+                    </div>
+                    <div className="grid md:grid-cols-5 gap-10 items-start">
+                        <div className="md:col-span-2 grid grid-cols-1 gap-3">
+                            <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-white/5">
+                                <img
+                                    src="/images/grand-celestial/Whisk_6c0af36a3e3d319860041a7b4159c1f3eg%20(1).jpeg"
+                                    alt="ブライダルフェア 豪華試食の様子"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                            <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-white/5">
+                                <img
+                                    src="/images/grand-celestial/Whisk_92a79edd0a62013aa8540fc92afbe016dr.png"
+                                    alt="ブライダルフェア 会場の雰囲気"
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        </div>
+                        <div className="md:col-span-3 space-y-8">
+                            <blockquote className="border-l-2 border-[#cfaa6e] pl-6 py-2">
+                                <p className="text-gray-300 font-serif leading-relaxed text-sm md:text-base">
+                                    試食が豪華でびっくりしました。お肉もお魚も美味しい！料理重視の彼も満足していました。思い出のメニューなどがだせるのも良かった。デザートが美味しくてブッフェは当日も絶対やりたいです。
+                                </p>
+                                <cite className="not-italic text-gray-500 text-xs mt-3 block">32歳・女性</cite>
+                            </blockquote>
+                            <blockquote className="border-l-2 border-[#cfaa6e] pl-6 py-2">
+                                <p className="text-gray-300 font-serif leading-relaxed text-sm md:text-base">
+                                    会場の雰囲気とドレス試着を一度に体験できて安心しました。スタッフの方が丁寧で、当日の流れもイメージしやすかったです。
+                                </p>
+                                <cite className="not-italic text-gray-500 text-xs mt-3 block">28歳・女性</cite>
+                            </blockquote>
+                            <p className="text-gray-500 text-xs font-serif">※試食内容・有無は、開催日・時間により異なります。</p>
+                            <Link href="#booking" className="inline-flex items-center gap-2 px-6 py-3 bg-[#cfaa6e] text-[#0a1a3b] font-display font-bold hover:bg-[#cfaa6e]/90 transition-colors uppercase tracking-widest text-sm rounded-sm">
+                                ブライダルフェアで体験する
+                                <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -442,7 +510,7 @@ export default function GrandCelestialPage() {
                         <div className="p-6 bg-white shadow-lg border-t-4 border-[#0a1a3b]">
                             <span className="material-symbols-outlined text-4xl text-[#cfaa6e] mb-4">subway</span>
                             <h3 className="font-bold text-lg mb-2">好アクセス</h3>
-                            <p className="text-sm text-gray-600">表参道駅徒歩1分。遠方ゲストも安心の立地。</p>
+                            <p className="text-sm text-gray-600">銀座一丁目駅徒歩3分。遠方ゲストも安心の立地。</p>
                         </div>
                     </div>
                 </div>
@@ -466,11 +534,17 @@ export default function GrandCelestialPage() {
                                 GRAND CELESTIALは、由緒ある歴史的建造物を大切に受け継ぎ、結婚式場として甦らせた特別な場所です。重厚な外観と洗練された佇まいは、訪れる方々に深い感動と信頼をお届けします。
                             </p>
                             <p className="text-gray-600 font-serif leading-relaxed text-sm">
-                                表参道の静謐な立地に佇む当館は、伝統とモダンが調和した唯一無二の空間。挙式から披露宴まで、お二人の門出を格式高くお支えいたします。
+                                銀座の静謐な立地に佇む当館は、伝統とモダンが調和した唯一無二の空間。挙式から披露宴まで、お二人の門出を格式高くお支えいたします。
                             </p>
-                            <Link href="#booking" className="inline-block mt-6 px-8 py-3 bg-[#0a1a3b] text-white font-serif text-sm font-bold hover:bg-[#0a1a3b]/90 transition-colors uppercase tracking-widest">
-                                アクセス・ご予約
-                            </Link>
+                            <div className="mt-6 flex flex-wrap items-center gap-4">
+                                <Link href="#booking" className="inline-block px-8 py-3 bg-[#0a1a3b] text-white font-serif text-sm font-bold hover:bg-[#0a1a3b]/90 transition-colors uppercase tracking-widest">
+                                    アクセス・ご予約
+                                </Link>
+                                <Link href="#booking" className="inline-flex items-center gap-2 text-[#0a1a3b] font-serif text-sm font-bold hover:text-[#cfaa6e] transition-colors border-b border-[#cfaa6e] pb-1">
+                                    ブライダルフェアで会場を見学する
+                                    <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -528,9 +602,9 @@ export default function GrandCelestialPage() {
                                     <div className="flex items-start">
                                         <span className="material-symbols-outlined text-[#cfaa6e] mr-4 mt-1">location_on</span>
                                         <p className="leading-relaxed">
-                                            〒107-0061<br />
-                                            東京都港区北青山3-5-30<br />
-                                            <span className="text-[#cfaa6e] mt-1 block">表参道駅 A2出口より徒歩1分</span>
+                                            〒104-0061<br />
+                                            東京都中央区銀座2-4-20<br />
+                                            <span className="text-[#cfaa6e] mt-1 block">銀座一丁目駅より徒歩3分</span>
                                         </p>
                                     </div>
                                     <div className="flex items-center">
