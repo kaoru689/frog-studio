@@ -61,7 +61,7 @@ export default function GrandCelestialPage() {
             </header>
             <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden bg-black">
                 <div className="absolute inset-0 z-0">
-                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="/images/grand-celestial/3f004ffe-30f2-4d74-abf2-b9471cd6ef1c.jpg" />
+                    <img alt="Grand Cathedral with Royal Blue Carpet" className="w-full h-full object-cover opacity-60" src="/images/grand-celestial/6bf8fabd-fbc6-4b0b-9f54-3af7e2c03beb.jpg" />
                     <div className="absolute inset-0 bg-gradient-to-b from-[#0a1a3b]/60 via-[#0a1a3b]/30 to-black/80 mix-blend-multiply"></div>
                 </div>
                 <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto mt-10">
@@ -179,7 +179,7 @@ export default function GrandCelestialPage() {
                         </div>
                     </div>
                     <div className="mt-4 relative h-64 md:h-80 overflow-hidden group w-full">
-                        <img alt="Ceremony Moment" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80" src="/images/grand-celestial/6bf8fabd-fbc6-4b0b-9f54-3af7e2c03beb.jpg" />
+                        <img alt="Ceremony Moment" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80" src="/images/grand-celestial/3f004ffe-30f2-4d74-abf2-b9471cd6ef1c.jpg" />
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                             <p className="text-white font-display text-2xl md:text-3xl italic tracking-wider">"A sacred vow in a timeless sanctuary"</p>
                         </div>
